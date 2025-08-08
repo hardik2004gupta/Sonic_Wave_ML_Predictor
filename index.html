@@ -7,38 +7,49 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --tertiary-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             --dark-gradient: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            --neural-gradient: linear-gradient(45deg, #0f0f23, #1a1a2e, #16213e, #0f3460);
             --glass-bg: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.08);
+            --quantum-glow: 0 0 30px rgba(102, 126, 234, 0.3);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
             font-family: 'Space Grotesk', sans-serif;
-            background: var(--dark-gradient);
+            background: var(--neural-gradient);
+            background-size: 400% 400%;
+            animation: neural-bg-shift 20s ease-in-out infinite;
             overflow-x: hidden;
             cursor: none;
         }
 
+        @keyframes neural-bg-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
         .custom-cursor {
             position: fixed;
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.8) 0%, transparent 70%);
+            width: 24px;
+            height: 24px;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.6) 50%, transparent 80%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 9999;
-            mix-blend-mode: difference;
+            mix-blend-mode: screen;
             transition: all 0.1s ease;
+            box-shadow: var(--quantum-glow);
         }
 
         .holographic-bg {
@@ -62,27 +73,28 @@
             width: 100%;
             height: 100%;
             background-image: 
-                radial-gradient(circle at 25% 25%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(79, 172, 254, 0.05) 0%, transparent 50%);
+                radial-gradient(circle at 25% 25%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(118, 75, 162, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(79, 172, 254, 0.08) 0%, transparent 50%);
             animation: neural-pulse 8s ease-in-out infinite;
         }
 
         @keyframes neural-pulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.7; }
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
         }
 
         .quantum-glass {
             background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.1) 0%,
-                rgba(255, 255, 255, 0.05) 50%,
+                rgba(255, 255, 255, 0.12) 0%,
+                rgba(255, 255, 255, 0.06) 50%,
                 rgba(255, 255, 255, 0.02) 100%);
-            backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(25px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+                0 12px 40px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                var(--quantum-glow);
         }
 
         .neon-border {
@@ -116,20 +128,21 @@
 
         .matrix-text {
             font-family: 'JetBrains Mono', monospace;
-            color: #00ff41;
-            text-shadow: 0 0 10px #00ff41;
+            color: #00ff88;
+            text-shadow: 0 0 15px #00ff88;
+            font-weight: 600;
         }
 
         .hologram-effect {
             position: relative;
-            background: linear-gradient(45deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            background: linear-gradient(45deg, transparent, rgba(102, 126, 234, 0.08), transparent);
             transform: perspective(1000px) rotateX(0deg);
             transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
         }
 
         .hologram-effect:hover {
-            transform: perspective(1000px) rotateX(5deg) rotateY(5deg) translateZ(20px);
-            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+            transform: perspective(1000px) rotateX(3deg) rotateY(3deg) translateZ(15px);
+            box-shadow: var(--quantum-glow), 0 20px 50px rgba(102, 126, 234, 0.25);
         }
 
         .quantum-button {
@@ -139,7 +152,11 @@
             color: white;
             overflow: hidden;
             transform-style: preserve-3d;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .quantum-button::before {
@@ -149,8 +166,8 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s ease;
         }
 
         .quantum-button:hover::before {
@@ -158,78 +175,112 @@
         }
 
         .quantum-button:hover {
-            transform: translateY(-3px) rotateX(10deg);
-            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+            transform: translateY(-4px) rotateX(8deg);
+            box-shadow: var(--quantum-glow), 0 20px 35px rgba(102, 126, 234, 0.4);
         }
 
-        .cyber-input {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(102, 126, 234, 0.3);
+        .cyber-input, .cyber-slider {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(102, 126, 234, 0.3);
             color: #ffffff;
+            font-family: 'JetBrains Mono', monospace;
             position: relative;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
+            font-size: 0.95rem;
         }
 
-        .cyber-input:focus {
+        .cyber-input:focus, .cyber-slider:focus {
             border-color: #667eea;
-            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+            box-shadow: 0 0 25px rgba(102, 126, 234, 0.6), inset 0 0 15px rgba(102, 126, 234, 0.1);
             transform: scale(1.02);
+            outline: none;
         }
 
         .cyber-input::placeholder {
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.4);
+            font-style: italic;
+        }
+
+        /* Enhanced Range Slider Styles */
+        .cyber-slider {
+            height: 8px;
+            border-radius: 20px;
+            appearance: none;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            opacity: 0.7;
+        }
+
+        .cyber-slider:hover {
+            opacity: 1;
+            transform: scaleY(1.2);
+        }
+
+        .cyber-slider::-webkit-slider-thumb {
+            appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00f2fe, #4facfe);
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(79, 172, 254, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .cyber-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.3);
+            box-shadow: 0 0 25px rgba(79, 172, 254, 1);
         }
 
         .status-indicator {
             position: relative;
             display: inline-block;
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
             animation: status-pulse 2s ease-in-out infinite;
         }
 
         .status-indicator.online {
-            background: radial-gradient(circle, #00ff41 30%, transparent 70%);
-            box-shadow: 0 0 20px #00ff41;
+            background: radial-gradient(circle, #00ff88 30%, transparent 70%);
+            box-shadow: 0 0 25px #00ff88;
         }
 
         .status-indicator.processing {
             background: radial-gradient(circle, #667eea 30%, transparent 70%);
-            box-shadow: 0 0 20px #667eea;
+            box-shadow: 0 0 25px #667eea;
         }
 
         @keyframes status-pulse {
             0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.2); }
+            50% { opacity: 0.6; transform: scale(1.3); }
         }
 
         .loading-quantum {
             position: relative;
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
         }
 
         .loading-ring {
             position: absolute;
-            border: 2px solid transparent;
-            border-top: 2px solid #667eea;
-            border-right: 2px solid #764ba2;
+            border: 3px solid transparent;
+            border-top: 3px solid #667eea;
+            border-right: 3px solid #764ba2;
             border-radius: 50%;
             animation: quantum-spin 1s linear infinite;
         }
 
         .loading-ring:nth-child(1) {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             animation-duration: 2s;
         }
 
         .loading-ring:nth-child(2) {
-            width: 80px;
-            height: 80px;
-            top: 10px;
-            left: 10px;
+            width: 90px;
+            height: 90px;
+            top: 15px;
+            left: 15px;
             animation-duration: 1.5s;
             animation-direction: reverse;
             border-top-color: #f093fb;
@@ -239,8 +290,8 @@
         .loading-ring:nth-child(3) {
             width: 60px;
             height: 60px;
-            top: 20px;
-            left: 20px;
+            top: 30px;
+            left: 30px;
             animation-duration: 1s;
             border-top-color: #4facfe;
             border-right-color: #00f2fe;
@@ -252,34 +303,38 @@
         }
 
         .success-ripple {
-            animation: success-ripple-effect 1s ease-out;
+            animation: success-ripple-effect 1.2s ease-out;
         }
 
         @keyframes success-ripple-effect {
             0% {
-                transform: scale(0.8);
+                transform: scale(0.85);
                 opacity: 0;
+                filter: hue-rotate(0deg);
             }
             50% {
-                transform: scale(1.1);
-                opacity: 0.8;
+                transform: scale(1.05);
+                opacity: 0.9;
+                filter: hue-rotate(180deg);
             }
             100% {
                 transform: scale(1);
                 opacity: 1;
+                filter: hue-rotate(360deg);
             }
         }
 
         .error-glitch {
-            animation: glitch 0.3s ease-in-out 3;
+            animation: glitch 0.4s ease-in-out 4;
         }
 
         @keyframes glitch {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px) skew(-5deg); }
-            50% { transform: translateX(5px) skew(5deg); }
-            75% { transform: translateX(-3px) skew(-3deg); }
-            100% { transform: translateX(0); }
+            0% { transform: translateX(0); filter: hue-rotate(0deg); }
+            20% { transform: translateX(-8px) skew(-8deg); filter: hue-rotate(90deg); }
+            40% { transform: translateX(8px) skew(8deg); filter: hue-rotate(180deg); }
+            60% { transform: translateX(-4px) skew(-4deg); filter: hue-rotate(270deg); }
+            80% { transform: translateX(4px) skew(4deg); filter: hue-rotate(360deg); }
+            100% { transform: translateX(0); filter: hue-rotate(0deg); }
         }
 
         #threejs-bg {
@@ -291,21 +346,98 @@
 
         .advanced-tooltip {
             position: absolute;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             color: #ffffff;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-family: 'JetBrains Mono', monospace;
             border: 1px solid #667eea;
             z-index: 1000;
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--quantum-glow);
+            max-width: 300px;
+        }
+
+        .gauge-bar {
+            height: 100%;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 20px;
+            background-image: linear-gradient(to right, var(--tw-gradient-from), var(--tw-gradient-to));
+            position: relative;
+        }
+
+        .gauge-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            border-radius: inherit;
+            animation: gauge-shimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes gauge-shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .explanation-item {
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slide-in 0.6s ease-out forwards;
+        }
+
+        @keyframes slide-in {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .chart-container {
+            position: relative;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
         }
 
         @media (max-width: 768px) {
-            .quantum-glass { backdrop-filter: blur(10px); }
+            .quantum-glass { backdrop-filter: blur(15px); }
             .hologram-effect:hover { transform: none; }
+            .custom-cursor { display: none; }
+            body { cursor: auto; }
+        }
+
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .title-glow {
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+            background-size: 400% 400%;
+            animation: gradient-shift 8s ease-in-out infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Orbitron', monospace;
+            font-weight: 800;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
     </style>
 </head>
@@ -327,20 +459,24 @@
         <nav class="max-w-7xl mx-auto px-6">
             <div class="quantum-glass rounded-full px-8 py-4 flex items-center justify-between neon-border">
                 <div class="flex items-center space-x-4">
-                    <div class="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                        ⚛️ SWP Neural
-                    </div>
+                    
+                        <span class="title-glow">⚛️ SWP Neural</span>
+                    
                     <div class="status-indicator online"></div>
-                    <span class="matrix-text text-sm">ONLINE</span>
+                    <span class="matrix-text text-sm">QUANTUM ACTIVE</span>
                 </div>
-                <div class="hidden md:flex items-center space-x-8 text-sm text-gray-300">
+                <div class="hidden md:flex items-center space-x-8 text-sm text-gray-300 font-medium">
                     <a href="#predict" class="hover:text-blue-400 transition-colors relative group">
                         Predict
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all group-hover:w-full"></span>
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 transition-all group-hover:w-full"></span>
                     </a>
                     <a href="#analytics" class="hover:text-purple-400 transition-colors relative group">
                         Analytics
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-400 transition-all group-hover:w-full"></span>
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-pink-400 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="#visualization" class="hover:text-emerald-400 transition-colors relative group">
+                        Visualization
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-emerald-400 to-teal-400 transition-all group-hover:w-full"></span>
                     </a>
                 </div>
             </div>
@@ -352,10 +488,8 @@
         <!-- Hero Section -->
         <section id="hero" class="min-h-screen flex items-center justify-center relative">
             <div class="max-w-7xl mx-auto px-6 text-center relative z-10">
-                <h1 class="text-6xl md:text-8xl font-black leading-none mb-8">
-                    <span class="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                        SONIC
-                    </span>
+                <h1 class="text-6xl md:text-8xl font-black leading-none mb-8 floating-animation">
+                    <span class="title-glow">SONIC</span>
                 </h1>
                 <h2 class="text-3xl md:text-5xl font-bold mb-6 holographic-bg">
                     <span class="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
@@ -363,23 +497,23 @@
                     </span>
                 </h2>
                 
-                <p class="text-lg md:text-xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
+                <p class="text-lg md:text-xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed font-medium">
                     Harness the power of quantum machine learning for ultra-precise well log analysis. 
                     Experience the future of sonic wave prediction with our advanced neural architecture.
                 </p>
                 
                 <div class="flex flex-wrap justify-center gap-8 mb-12">
-                    <div class="quantum-glass px-6 py-3 rounded-full flex items-center space-x-3">
+                    <div class="quantum-glass px-6 py-3 rounded-full flex items-center space-x-3 floating-animation">
                         <div class="status-indicator online"></div>
-                        <span class="text-emerald-400 font-medium">99.7% Accuracy</span>
+                        <span class="text-emerald-400 font-bold">99.7% Accuracy</span>
                     </div>
-                    <div class="quantum-glass px-6 py-3 rounded-full flex items-center space-x-3">
+                    <div class="quantum-glass px-6 py-3 rounded-full flex items-center space-x-3 floating-animation" style="animation-delay: 1s;">
                         <div class="status-indicator processing"></div>
-                        <span class="text-blue-400 font-medium">Neural Processing</span>
+                        <span class="text-blue-400 font-bold">Neural Processing</span>
                     </div>
-                    <div class="quantum-glass px-6 py-3 rounded-full flex items-center space-x-3">
+                    <div class="quantum-glass px-6 py-3 rounded-full flex items-center space-x-3 floating-animation" style="animation-delay: 2s;">
                         <div class="status-indicator online"></div>
-                        <span class="text-purple-400 font-medium">Quantum Enhanced</span>
+                        <span class="text-purple-400 font-bold">Quantum Enhanced</span>
                     </div>
                 </div>
                 
@@ -400,11 +534,9 @@
             <div class="max-w-7xl mx-auto px-6">
                 <div class="text-center mb-16">
                     <h2 class="text-4xl font-bold mb-6">
-                        <span class="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                            Neural Command Center
-                        </span>
+                        <span class="title-glow">Neural Command Center</span>
                     </h2>
-                    <p class="text-lg text-gray-300 max-w-3xl mx-auto">
+                    <p class="text-lg text-gray-300 max-w-3xl mx-auto font-medium">
                         Input your well log parameters and let our quantum-enhanced neural network 
                         predict sonic wave properties with unprecedented accuracy.
                     </p>
@@ -417,7 +549,7 @@
                             <div class="flex items-center justify-between mb-8">
                                 <h3 class="text-3xl font-bold text-white flex items-center space-x-3">
                                     <span>⚛️</span>
-                                    <span>Well Log Parameters</span>
+                                    <span class="title-glow">Well Log Parameters</span>
                                 </h3>
                                 <div class="flex space-x-3">
                                     <button id="clearBtn" class="quantum-button px-6 py-2 rounded-lg text-sm opacity-70 hover:opacity-100">
@@ -438,16 +570,20 @@
                                     <div class="group relative">
                                         <label class="block text-sm font-bold text-gray-300 mb-3">
                                             📏 Caliper Log (CAL)
-                                            <span class="text-gray-500 text-xs block">inches • borehole diameter</span>
+                                            <span class="text-gray-500 text-xs block font-normal">inches • borehole diameter</span>
                                         </label>
-                                        <div class="relative">
-                                            <input type="number" id="cal" name="CAL" step="any" required
-                                                   class="cyber-input w-full px-4 py-3 rounded-xl transition-all duration-300 font-mono"
-                                                   placeholder="8.5">
-                                            <div class="absolute right-3 top-3 text-blue-400">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                                </svg>
+                                        <div class="space-y-3">
+                                            <input type="range" id="cal-slider" min="8.0" max="9.5" step="0.01" value="8.5781"
+                                                   class="cyber-slider w-full">
+                                            <div class="relative">
+                                                <input type="number" id="cal" name="CAL" step="any" required value="8.5781"
+                                                       class="cyber-input w-full px-4 py-3 rounded-xl transition-all duration-300"
+                                                       placeholder="8.5">
+                                                <div class="absolute right-3 top-3 text-blue-400">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                                    </svg>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -456,16 +592,20 @@
                                     <div class="group relative">
                                         <label class="block text-sm font-bold text-gray-300 mb-3">
                                             🎯 Neutron Porosity (CNC)
-                                            <span class="text-gray-500 text-xs block">p.u. • neutron response</span>
+                                            <span class="text-gray-500 text-xs block font-normal">p.u. • neutron response</span>
                                         </label>
-                                        <div class="relative">
-                                            <input type="number" id="cnc" name="CNC" step="any" required
-                                                   class="cyber-input w-full px-4 py-3 rounded-xl transition-all duration-300 font-mono"
-                                                   placeholder="0.15">
-                                            <div class="absolute right-3 top-3 text-purple-400">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                                </svg>
+                                        <div class="space-y-3">
+                                            <input type="range" id="cnc-slider" min="0.03" max="0.5" step="0.001" value="0.3521"
+                                                   class="cyber-slider w-full">
+                                            <div class="relative">
+                                                <input type="number" id="cnc" name="CNC" step="any" required value="0.3521"
+                                                       class="cyber-input w-full px-4 py-3 rounded-xl transition-all duration-300"
+                                                       placeholder="0.15">
+                                                <div class="absolute right-3 top-3 text-purple-400">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                                    </svg>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -474,16 +614,20 @@
                                     <div class="group relative">
                                         <label class="block text-sm font-bold text-gray-300 mb-3">
                                             ☢️ Gamma Ray (GR)
-                                            <span class="text-gray-500 text-xs block">API • natural radioactivity</span>
+                                            <span class="text-gray-500 text-xs block font-normal">API • natural radioactivity</span>
                                         </label>
-                                        <div class="relative">
-                                            <input type="number" id="gr" name="GR" step="any" required
-                                                   class="cyber-input w-full px-4 py-3 rounded-xl transition-all duration-300 font-mono"
-                                                   placeholder="75.2">
-                                            <div class="absolute right-3 top-3 text-green-400">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                                                </svg>
+                                        <div class="space-y-3">
+                                            <input type="range" id="gr-slider" min="1.0" max="250.0" step="1" value="41.4699"
+                                                   class="cyber-slider w-full">
+                                            <div class="relative">
+                                                <input type="number" id="gr" name="GR" step="any" required value="41.4699"
+                                                       class="cyber-input w-full px-4 py-3 rounded-xl transition-all duration-300"
+                                                       placeholder="75.2">
+                                                <div class="absolute right-3 top-3 text-green-400">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                                    </svg>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -492,16 +636,20 @@
                                     <div class="group relative">
                                         <label class="block text-sm font-bold text-gray-300 mb-3">
                                             🔌 Deep Resistivity (HRD)
-                                            <span class="text-gray-500 text-xs block">Ω⋅m • formation resistance</span>
+                                            <span class="text-gray-500 text-xs block font-normal">Ω⋅m • formation resistance</span>
                                         </label>
-                                        <div class="relative">
-                                            <input type="number" id="hrd" name="HRD" step="any" required
-                                                   class="cyber-input w-full px-4 py-3 rounded-xl transition-all duration-300 font-mono"
-                                                   placeholder="10.5">
-                                            <div class="absolute right-3 top-3 text-yellow-400">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                                </svg>
+                                        <div class="space-y-3">
+                                            <input type="range" id="hrd-slider" min="0.1" max="5.5" step="0.01" value="0.8121"
+                                                   class="cyber-slider w-full">
+                                            <div class="relative">
+                                                <input type="number" id="hrd" name="HRD" step="any" required value="0.8121"
+                                                       class="cyber-input w-full px-4 py-3 rounded-xl transition-all duration-300"
+                                                       placeholder="10.5">
+                                                <div class="absolute right-3 top-3 text-yellow-400">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                                    </svg>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -510,16 +658,20 @@
                                     <div class="group relative">
                                         <label class="block text-sm font-bold text-gray-300 mb-3">
                                             ⚡ Medium Resistivity (HRM)
-                                            <span class="text-gray-500 text-xs block">Ω⋅m • medium depth</span>
+                                            <span class="text-gray-500 text-xs block font-normal">Ω⋅m • medium depth</span>
                                         </label>
-                                        <div class="relative">
-                                            <input type="number" id="hrm" name="HRM" step="any" required
-                                                   class="cyber-input w-full px-4 py-3 rounded-xl transition-all duration-300 font-mono"
-                                                   placeholder="8.3">
-                                            <div class="absolute right-3 top-3 text-orange-400">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                                </svg>
+                                        <div class="space-y-3">
+                                            <input type="range" id="hrm-slider" min="0.1" max="5.5" step="0.01" value="0.781"
+                                                   class="cyber-slider w-full">
+                                            <div class="relative">
+                                                <input type="number" id="hrm" name="HRM" step="any" required value="0.781"
+                                                       class="cyber-input w-full px-4 py-3 rounded-xl transition-all duration-300"
+                                                       placeholder="8.3">
+                                                <div class="absolute right-3 top-3 text-orange-400">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                                    </svg>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -528,16 +680,20 @@
                                     <div class="group relative">
                                         <label class="block text-sm font-bold text-gray-300 mb-3">
                                             🌈 Photoelectric (PE)
-                                            <span class="text-gray-500 text-xs block">b/e⁻ • lithology indicator</span>
+                                            <span class="text-gray-500 text-xs block font-normal">b/e⁻ • lithology indicator</span>
                                         </label>
-                                        <div class="relative">
-                                            <input type="number" id="pe" name="PE" step="any" required
-                                                   class="cyber-input w-full px-4 py-3 rounded-xl transition-all duration-300 font-mono"
-                                                   placeholder="2.8">
-                                            <div class="absolute right-3 top-3 text-pink-400">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h4a2 2 0 002-2V9a2 2 0 00-2-2H7a2 2 0 00-2 2v6a2 2 0 002 2z"></path>
-                                                </svg>
+                                        <div class="space-y-3">
+                                            <input type="range" id="pe-slider" min="0.1" max="10.0" step="0.1" value="6.8291"
+                                                   class="cyber-slider w-full">
+                                            <div class="relative">
+                                                <input type="number" id="pe" name="PE" step="any" required value="6.8291"
+                                                       class="cyber-input w-full px-4 py-3 rounded-xl transition-all duration-300"
+                                                       placeholder="2.8">
+                                                <div class="absolute right-3 top-3 text-pink-400">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h4a2 2 0 002-2V9a2 2 0 00-2-2H7a2 2 0 00-2 2v6a2 2 0 002 2z"></path>
+                                                    </svg>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -546,16 +702,20 @@
                                     <div class="group relative">
                                         <label class="block text-sm font-bold text-gray-300 mb-3">
                                             🏗️ Bulk Density (ZDEN)
-                                            <span class="text-gray-500 text-xs block">g/cm³ • formation density</span>
+                                            <span class="text-gray-500 text-xs block font-normal">g/cm³ • formation density</span>
                                         </label>
-                                        <div class="relative">
-                                            <input type="number" id="zden" name="ZDEN" step="any" required
-                                                   class="cyber-input w-full px-4 py-3 rounded-xl transition-all duration-300 font-mono"
-                                                   placeholder="2.35">
-                                            <div class="absolute right-3 top-3 text-cyan-400">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
-                                                </svg>
+                                        <div class="space-y-3">
+                                            <input type="range" id="zden-slider" min="1.5" max="3.0" step="0.01" value="2.3256"
+                                                   class="cyber-slider w-full">
+                                            <div class="relative">
+                                                <input type="number" id="zden" name="ZDEN" step="any" required value="2.3256"
+                                                       class="cyber-input w-full px-4 py-3 rounded-xl transition-all duration-300"
+                                                       placeholder="2.35">
+                                                <div class="absolute right-3 top-3 text-cyan-400">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                                                    </svg>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -584,34 +744,34 @@
                         <div class="quantum-glass rounded-2xl p-6 neon-border">
                             <h3 class="text-xl font-bold text-white mb-6 flex items-center space-x-2">
                                 <span>⚡</span>
-                                <span>Quantum Status</span>
+                                <span class="title-glow">Quantum Status</span>
                             </h3>
                             <div class="space-y-4">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-gray-300">Neural Engine</span>
+                                    <span class="text-gray-300 font-medium">Neural Engine</span>
                                     <div class="flex items-center space-x-2">
                                         <div class="status-indicator online"></div>
                                         <span class="matrix-text text-sm">ACTIVE</span>
                                     </div>
                                 </div>
                                 <div class="flex items-center justify-between">
-                                    <span class="text-gray-300">Quantum Core</span>
+                                    <span class="text-gray-300 font-medium">Quantum Core</span>
                                     <div class="flex items-center space-x-2">
                                         <div class="status-indicator processing"></div>
-                                        <span class="text-blue-400 text-sm">READY</span>
+                                        <span class="text-blue-400 text-sm font-bold">READY</span>
                                     </div>
                                 </div>
                                 <div class="flex items-center justify-between">
-                                    <span class="text-gray-300">Model Version</span>
-                                    <span class="text-purple-400 text-sm font-mono">v4.2.1</span>
+                                    <span class="text-gray-300 font-medium">Model Version</span>
+                                    <span class="text-purple-400 text-sm font-mono font-bold">v4.2.1</span>
                                 </div>
                                 <div class="flex items-center justify-between">
-                                    <span class="text-gray-300">Accuracy</span>
-                                    <span class="text-green-400 text-sm font-mono">99.7%</span>
+                                    <span class="text-gray-300 font-medium">Accuracy</span>
+                                    <span class="text-green-400 text-sm font-mono font-bold">99.7%</span>
                                 </div>
                                 <div class="flex items-center justify-between">
-                                    <span class="text-gray-300">Last Sync</span>
-                                    <span class="text-gray-400 text-sm" id="lastSync">--:--</span>
+                                    <span class="text-gray-300 font-medium">Last Sync</span>
+                                    <span class="text-gray-400 text-sm font-mono" id="lastSync">--:--</span>
                                 </div>
                             </div>
                         </div>
@@ -624,18 +784,18 @@
                                 <div class="loading-ring"></div>
                             </div>
                             <h3 class="text-xl font-bold text-white mb-3">🔬 Quantum Processing</h3>
-                            <p class="text-gray-300 mb-4">Neural networks analyzing well parameters...</p>
-                            <div class="bg-gray-800 rounded-full h-3 overflow-hidden">
-                                <div id="progressBar" class="h-3 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            <p class="text-gray-300 mb-4 font-medium">Neural networks analyzing well parameters...</p>
+                            <div class="bg-gray-800 rounded-full h-4 overflow-hidden">
+                                <div id="progressBar" class="h-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full transition-all duration-300" style="width: 0%"></div>
                             </div>
-                            <p id="loadingStage" class="text-sm text-gray-400 mt-2">Initializing...</p>
+                            <p id="loadingStage" class="text-sm text-gray-400 mt-3 font-mono">Initializing...</p>
                         </div>
 
                         <!-- Live Data Feed -->
                         <div class="quantum-glass rounded-2xl p-6">
                             <h3 class="text-lg font-bold text-white mb-4 flex items-center space-x-2">
                                 <span>📡</span>
-                                <span>Live Data Feed</span>
+                                <span class="title-glow">Live Data Feed</span>
                             </h3>
                             <div id="dataFeed" class="space-y-2 max-h-48 overflow-y-auto text-xs font-mono">
                                 <div class="text-green-400">[INIT] Neural engine initialized</div>
@@ -656,77 +816,91 @@
                 <div id="resultsPanel" class="hidden">
                     <div class="text-center mb-12">
                         <h2 class="text-5xl font-bold mb-6">
-                            <span class="bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-                                Neural Prediction Results
-                            </span>
+                            <span class="title-glow">Neural Prediction Results</span>
                         </h2>
-                        <p class="text-xl text-gray-300">Quantum-enhanced analysis complete</p>
+                        <p class="text-xl text-gray-300 font-medium">Quantum-enhanced analysis complete</p>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
                         <!-- DTC Result -->
-                        <div class="quantum-glass rounded-3xl p-8">
+                        <div class="quantum-glass rounded-3xl p-8 hologram-effect">
                             <div class="flex items-center justify-between mb-6">
                                 <div>
                                     <h3 class="text-2xl font-bold text-white">Delta Time Compressional</h3>
-                                    <p class="text-gray-400">P-wave travel time</p>
+                                    <p class="text-gray-400 font-medium">P-wave travel time</p>
                                 </div>
                             </div>
-                            <div class="text-center">
-                                <div id="dtcResult" class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 mb-2">
+                            <div class="text-center mb-4">
+                                <div id="dtcResult" class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 mb-2 font-mono">
                                     ---.----
                                 </div>
-                                <p class="text-gray-400 mb-4">μs/ft</p>
-                                <div class="flex items-center justify-between text-sm">
-                                    <span class="text-gray-300">Confidence:</span>
-                                    <span id="dtcConfidence" class="text-green-400 font-mono">--%</span>
-                                </div>
+                                <p class="text-gray-400 mb-4 font-medium">μs/ft</p>
+                            </div>
+                            <div class="bg-gray-900 rounded-2xl h-8 overflow-hidden mb-4">
+                                <div id="dtcGauge" class="gauge-bar from-blue-500 to-cyan-400"></div>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-300 font-medium">Confidence:</span>
+                                <span id="dtcConfidence" class="text-green-400 font-mono font-bold">--%</span>
                             </div>
                         </div>
 
                         <!-- DTS Result -->
-                        <div class="quantum-glass rounded-3xl p-8">
+                        <div class="quantum-glass rounded-3xl p-8 hologram-effect">
                             <div class="flex items-center justify-between mb-6">
                                 <div>
                                     <h3 class="text-2xl font-bold text-white">Delta Time Shear</h3>
-                                    <p class="text-gray-400">S-wave travel time</p>
+                                    <p class="text-gray-400 font-medium">S-wave travel time</p>
                                 </div>
                             </div>
-                            <div class="text-center">
-                                <div id="dtsResult" class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400 mb-2">
+                            <div class="text-center mb-4">
+                                <div id="dtsResult" class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400 mb-2 font-mono">
                                     ---.----
                                 </div>
-                                <p class="text-gray-400 mb-4">μs/ft</p>
-                                <div class="flex items-center justify-between text-sm">
-                                    <span class="text-gray-300">Confidence:</span>
-                                    <span id="dtsConfidence" class="text-green-400 font-mono">--%</span>
-                                </div>
+                                <p class="text-gray-400 mb-4 font-medium">μs/ft</p>
+                            </div>
+                            <div class="bg-gray-900 rounded-2xl h-8 overflow-hidden mb-4">
+                                <div id="dtsGauge" class="gauge-bar from-emerald-500 to-teal-400"></div>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-300 font-medium">Confidence:</span>
+                                <span id="dtsConfidence" class="text-green-400 font-mono font-bold">--%</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Advanced Metrics -->
-                    <div class="quantum-glass rounded-3xl p-8 neon-border">
+                    <div class="quantum-glass rounded-3xl p-8 neon-border mb-8">
                         <h3 class="text-2xl font-bold text-white mb-6 text-center">
-                            🧠 Neural Analysis Metrics
+                            <span class="title-glow">🧠 Neural Analysis Metrics</span>
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                             <div class="text-center">
-                                <div class="text-3xl font-bold text-blue-400 mb-2" id="processingTime">-- ms</div>
-                                <p class="text-gray-400 text-sm">Processing Time</p>
+                                <div class="text-3xl font-bold text-blue-400 mb-2 font-mono" id="processingTime">-- ms</div>
+                                <p class="text-gray-400 text-sm font-medium">Processing Time</p>
                             </div>
                             <div class="text-center">
-                                <div class="text-3xl font-bold text-green-400 mb-2" id="modelConfidence">--%</div>
-                                <p class="text-gray-400 text-sm">Model Confidence</p>
+                                <div class="text-3xl font-bold text-green-400 mb-2 font-mono" id="modelConfidence">--%</div>
+                                <p class="text-gray-400 text-sm font-medium">Model Confidence</p>
                             </div>
                             <div class="text-center">
-                                <div class="text-3xl font-bold text-purple-400 mb-2" id="dataQuality">--</div>
-                                <p class="text-gray-400 text-sm">Data Quality</p>
+                                <div class="text-3xl font-bold text-purple-400 mb-2 font-mono" id="dataQuality">--</div>
+                                <p class="text-gray-400 text-sm font-medium">Data Quality</p>
                             </div>
                             <div class="text-center">
-                                <div class="text-3xl font-bold text-pink-400 mb-2" id="uncertaintyRange">±--%</div>
-                                <p class="text-gray-400 text-sm">Uncertainty</p>
+                                <div class="text-3xl font-bold text-pink-400 mb-2 font-mono" id="uncertaintyRange">±--%</div>
+                                <p class="text-gray-400 text-sm font-medium">Uncertainty</p>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Geological Interpretation -->
+                    <div id="geologicalInterpretation" class="quantum-glass rounded-3xl p-8 neon-border">
+                        <h3 class="text-2xl font-bold text-white mb-6 text-center">
+                            <span class="title-glow">🌍 Geological Interpretation</span>
+                        </h3>
+                        <div id="interpretationList" class="space-y-3 text-gray-300">
+                            <!-- Dynamic content will be populated here -->
                         </div>
                     </div>
                 </div>
@@ -736,11 +910,34 @@
                     <div class="quantum-glass rounded-3xl p-12 max-w-2xl mx-auto error-glitch">
                         <div class="text-6xl mb-6">⚠️</div>
                         <h3 class="text-3xl font-bold text-red-400 mb-4">Quantum Processing Error</h3>
-                        <p class="text-gray-300 mb-8" id="errorMessage">Neural network connection failed. Quantum tunnel may be unstable.</p>
+                        <p class="text-gray-300 mb-8 font-medium" id="errorMessage">Neural network connection failed. Quantum tunnel may be unstable.</p>
                         <button onclick="retryPrediction()" 
                                 class="quantum-button px-8 py-3 rounded-xl text-lg font-bold">
                             🔄 Reinitialize Quantum Core
                         </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Visualization Section -->
+        <section id="visualization" class="min-h-screen py-20">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold mb-6">
+                        <span class="title-glow">Real-Time Data Visualization</span>
+                    </h2>
+                    <p class="text-lg text-gray-300 max-w-3xl mx-auto font-medium">
+                        Interactive visualization of well log data and predictions with quantum-enhanced analytics.
+                    </p>
+                </div>
+
+                <div class="quantum-glass rounded-3xl p-8 neon-border hologram-effect">
+                    <div class="chart-container">
+                        <h3 class="text-xl font-bold text-white mb-4 text-center">
+                            ZDEN vs DTC Correlation Analysis
+                        </h3>
+                        <canvas id="scatterPlot" class="w-full" style="max-height: 400px;"></canvas>
                     </div>
                 </div>
             </div>
@@ -752,12 +949,735 @@
         // Global variables
         let scene, camera, renderer;
         let predictionCount = 0;
+        let scatterChart;
+        
+        // Sample data for visualization
+        const sampleData = [
+            {"x":2.3256,"y":128.0737}, {"x":2.3255,"y":127.8347}, {"x":2.3212,"y":127.2307}, {"x":2.3119,"y":126.2917},
+                {"x":2.2982,"y":125.3985}, {"x":2.2817,"y":125.023}, {"x":2.2648,"y":125.3598}, {"x":2.2484,"y":126.0463},
+                {"x":2.2337,"y":127.1648}, {"x":2.2211,"y":128.4239}, {"x":2.2138,"y":129.584}, {"x":2.2173,"y":129.8055},
+                {"x":2.2344,"y":128.918}, {"x":2.2602,"y":128.1633}, {"x":2.2859,"y":128.0261}, {"x":2.3053,"y":128.469},
+                {"x":2.3177,"y":129.0827}, {"x":2.3265,"y":128.9452}, {"x":2.3352,"y":128.6186}, {"x":2.3427,"y":128.1633},
+                {"x":2.3565,"y":127.8759}, {"x":2.3794,"y":127.2522}, {"x":2.4168,"y":126.5436}, {"x":2.4578,"y":125.4439},
+                {"x":2.4833,"y":124.6942}, {"x":2.5298,"y":124.1627}, {"x":2.5532,"y":124.3168}, {"x":2.5727,"y":125.0901},
+                {"x":2.5756,"y":126.0963}, {"x":2.5742,"y":126.8923}, {"x":2.5691,"y":127.3598}, {"x":2.56,"y":127.7013},
+                {"x":2.5482,"y":127.7713}, {"x":2.534, "y":127.671}, {"x":2.5186,"y":127.3915}, {"x":2.5028,"y":126.9691},
+                {"x":2.487,"y":126.6575}, {"x":2.4722,"y":126.5401}, {"x":2.4571,"y":126.5912}, {"x":2.4411,"y":126.8339},
+                {"x":2.4309,"y":127.1714}, {"x":2.428,"y":127.5614}, {"x":2.4302,"y":127.8427}, {"x":2.4293,"y":127.9793},
+                {"x":2.4287,"y":128.0055}, {"x":2.4294,"y":127.9351}, {"x":2.4332,"y":127.7661}, {"x":2.4367,"y":127.5255},
+                {"x":2.4389,"y":127.3828}, {"x":2.4402,"y":127.3486}, {"x":2.4443,"y":127.4243}, {"x":2.4468,"y":127.6181},
+                {"x":2.4491,"y":127.9333}, {"x":2.4515,"y":128.3299}, {"x":2.4522,"y":128.718}, {"x":2.4542,"y":128.9888},
+                {"x":2.4552,"y":129.0762}, {"x":2.4539,"y":129.0888}, {"x":2.4518,"y":129.0139}, {"x":2.4465,"y":128.9189},
+                {"x":2.4393,"y":128.807}, {"x":2.4344,"y":128.8078}, {"x":2.4278,"y":128.8441}, {"x":2.4223,"y":128.8878},
+                {"x":2.4181,"y":128.9669}, {"x":2.4149,"y":129.083}, {"x":2.4121,"y":129.2156}, {"x":2.4093,"y":129.3878},
+                {"x":2.4058,"y":129.5898}, {"x":2.4036,"y":129.7423}, {"x":2.4028,"y":129.8052}, {"x":2.401,"y":129.809},
+                {"x":2.4022,"y":129.7997}, {"x":2.4027,"y":129.7547}, {"x":2.4048,"y":129.6806}, {"x":2.4057,"y":129.5398},
+                {"x":2.4063,"y":129.369}, {"x":2.4069,"y":129.2316}, {"x":2.406,"y":129.1362}, {"x":2.4051,"y":129.0851},
+                {"x":2.4042,"y":129.0666}, {"x":2.4032,"y":129.0407}, {"x":2.4019,"y":128.9959}, {"x":2.4005,"y":128.9749},
+                {"x":2.3996,"y":128.9558}, {"x":2.3989,"y":128.9525}, {"x":2.3982,"y":128.9793}, {"x":2.397,"y":129.043},
+                {"x":2.395,"y":129.1248}, {"x":2.3929,"y":129.2273}, {"x":2.3906,"y":129.3427}, {"x":2.3887,"y":129.508},
+                {"x":2.3875,"y":129.7024}, {"x":2.3857,"y":129.939}, {"x":2.3838,"y":130.2227}, {"x":2.3817,"y":130.5606},
+                {"x":2.3789,"y":130.9333}, {"x":2.3762,"y":131.2865}, {"x":2.3735,"y":131.6369}, {"x":2.3704,"y":131.9541},
+                {"x":2.3689,"y":132.2226}, {"x":2.3664,"y":132.4171}, {"x":2.3626,"y":132.4419}, {"x":2.3577,"y":132.2855},
+                {"x":2.3532,"y":131.983}, {"x":2.3512,"y":131.6033}, {"x":2.3539,"y":131.3323}, {"x":2.3558,"y":131.2185},
+                {"x":2.3551,"y":131.2581}, {"x":2.3548,"y":131.3851}, {"x":2.3554,"y":131.6109}, {"x":2.3562,"y":131.9118},
+                {"x":2.3568,"y":132.2475}, {"x":2.3573,"y":132.5566}, {"x":2.3585,"y":132.7479}, {"x":2.361,"y":132.8804},
+                {"x":2.3639,"y":132.9669}, {"x":2.366,"y":133.0035}, {"x":2.3674,"y":133.0019}, {"x":2.3686,"y":132.9556},
+                {"x":2.3712,"y":132.8596}, {"x":2.3731,"y":132.7215}, {"x":2.3742,"y":132.5459}, {"x":2.3751,"y":132.3299},
+                {"x":2.3756,"y":132.1158}, {"x":2.3755,"y":131.9161}, {"x":2.3743,"y":131.758}, {"x":2.3734,"y":131.6669},
+                {"x":2.3726,"y":131.6427}, {"x":2.3718,"y":131.6417}, {"x":2.3707,"y":131.6533}, {"x":2.3698,"y":131.684},
+                {"x":2.3689,"y":131.7165}, {"x":2.3681,"y":131.7483}, {"x":2.3664,"y":131.7971}, {"x":2.3637,"y":131.8106},
+                {"x":2.3602,"y":131.8661}, {"x":2.3551,"y":131.9612}, {"x":2.3485,"y":132.1309}, {"x":2.3417,"y":132.339},
+                {"x":2.3353,"y":132.569}, {"x":2.3292,"y":132.8094}, {"x":2.3243,"y":133.0135}, {"x":2.3218,"y":133.1517},
+                {"x":2.3204,"y":133.1953}, {"x":2.3175,"y":133.1235}, {"x":2.3153,"y":132.9123}, {"x":2.3142,"y":132.6102},
+                {"x":2.3151,"y":132.2227}, {"x":2.3188,"y":131.7993}, {"x":2.3229,"y":131.3709}, {"x":2.3268,"y":130.9859},
+                {"x":2.3304,"y":130.6404}, {"x":2.3323,"y":130.3953}, {"x":2.334,"y":130.2223}, {"x":2.3332,"y":130.0814},
+                {"x":2.3331,"y":129.9878}, {"x":2.3335,"y":129.9328}, {"x":2.3341,"y":129.9235}, {"x":2.3348,"y":129.9333},
+                {"x":2.3346,"y":129.9897}, {"x":2.3341,"y":130.0759}, {"x":2.3328,"y":130.1601}, {"x":2.3304,"y":130.2201},
+                {"x":2.3262,"y":130.2241}, {"x":2.322,"y":130.1584}, {"x":2.3172,"y":129.9983}, {"x":2.3142,"y":129.7431},
+                {"x":2.3129,"y":129.3512}, {"x":2.3134,"y":128.9114}, {"x":2.3142,"y":128.4614}, {"x":2.3148,"y":128.026},
+                {"x":2.3157,"y":127.653}, {"x":2.3168,"y":127.359}, {"x":2.3175,"y":127.165}, {"x":2.3185,"y":127.0673},
+                {"x":2.3188,"y":127.042}, {"x":2.3193,"y":127.0519}, {"x":2.3204,"y":127.0864}, {"x":2.321,"y":127.1363},
+                {"x":2.3209,"y":127.1991}, {"x":2.3197,"y":127.2727}, {"x":2.3187,"y":127.3541}, {"x":2.3179,"y":127.4299},
+                {"x":2.3174,"y":127.4926}, {"x":2.3173,"y":127.5303}, {"x":2.3178,"y":127.5647}, {"x":2.3182,"y":127.6019},
+                {"x":2.3184,"y":127.6185}, {"x":2.3179,"y":127.6258}, {"x":2.3171,"y":127.6226}, {"x":2.3162,"y":127.6046},
+                {"x":2.3149,"y":127.575}, {"x":2.3122,"y":127.5638}, {"x":2.3087,"y":127.5613}, {"x":2.3052,"y":127.5746},
+                {"x":2.3015,"y":127.5912}, {"x":2.2989,"y":127.6174}, {"x":2.2965,"y":127.6436}, {"x":2.2948,"y":127.6713},
+                {"x":2.2938,"y":127.6974}, {"x":2.2933,"y":127.7022}, {"x":2.2921,"y":127.6896}, {"x":2.2898,"y":127.659},
+                {"x":2.2888,"y":127.6247}, {"x":2.2862,"y":127.5878}, {"x":2.283,"y":127.5555}, {"x":2.2796,"y":127.5317},
+                {"x":2.2769,"y":127.5186}, {"x":2.2742,"y":127.5132}, {"x":2.2721,"y":127.5126}, {"x":2.271,"y":127.5113},
+                {"x":2.2699,"y":127.5109}, {"x":2.2687,"y":127.5113}, {"x":2.2676,"y":127.5119}, {"x":2.266,"y":127.514},
+                {"x":2.2647,"y":127.5169}, {"x":2.2628,"y":127.5198}, {"x":2.2603,"y":127.5218}, {"x":2.2569,"y":127.5199},
+                {"x":2.2539,"y":127.5186}, {"x":2.2519,"y":127.5173}, {"x":2.2505,"y":127.5176}, {"x":2.2503,"y":127.5178},
+                {"x":2.2507,"y":127.5215}, {"x":2.251,"y":127.5262}, {"x":2.2522,"y":127.5349}, {"x":2.2541,"y":127.5455},
+                {"x":2.2561,"y":127.558}, {"x":2.2573,"y":127.5714}, {"x":2.2582,"y":127.5855}, {"x":2.2588,"y":127.598},
+                {"x":2.2603,"y":127.614}, {"x":2.2625,"y":127.6322}, {"x":2.265,"y":127.6534}, {"x":2.2677,"y":127.6748},
+                {"x":2.2696,"y":127.6896}, {"x":2.271,"y":127.7011}, {"x":2.2729,"y":127.7118}, {"x":2.2755,"y":127.7246},
+                {"x":2.2783,"y":127.7373}, {"x":2.2807,"y":127.7505}, {"x":2.2829,"y":127.7661}, {"x":2.2851,"y":127.781},
+                {"x":2.2872,"y":127.794}, {"x":2.2887,"y":127.8037}, {"x":2.2905,"y":127.8105}, {"x":2.2918,"y":127.8142},
+                {"x":2.2933,"y":127.8173}, {"x":2.2948,"y":127.8193}, {"x":2.2955,"y":127.8204}, {"x":2.2961,"y":127.8202},
+                {"x":2.297,"y":127.8206}, {"x":2.2988,"y":127.8239}, {"x":2.3013,"y":127.8285}, {"x":2.3031,"y":127.8344},
+                {"x":2.3045,"y":127.8407}, {"x":2.3054,"y":127.8488}, {"x":2.3069,"y":127.8596}, {"x":2.3083,"y":127.8715},
+                {"x":2.3093,"y":127.8821}, {"x":2.3104,"y":127.8924}, {"x":2.3115,"y":127.9026}, {"x":2.3122,"y":127.9126},
+                {"x":2.3134,"y":127.9228}, {"x":2.3142,"y":127.9309}, {"x":2.3151,"y":127.938}, {"x":2.3158,"y":127.9443},
+                {"x":2.3168,"y":127.9507}, {"x":2.3175,"y":127.958}, {"x":2.3185,"y":127.965}, {"x":2.3188,"y":127.9715},
+                {"x":2.3193,"y":127.9793}, {"x":2.3204,"y":127.9891}, {"x":2.321,"y":127.9975}, {"x":2.3209,"y":128.0051},
+                {"x":2.3197,"y":128.0125}, {"x":2.3187,"y":128.0189}, {"x":2.3179,"y":128.0261}, {"x":2.3174,"y":128.0315},
+                {"x":2.3173,"y":128.0381}, {"x":2.3178,"y":128.046}, {"x":2.3182,"y":128.053}, {"x":2.3184,"y":128.061},
+                {"x":2.3179,"y":128.068}, {"x":2.3171,"y":128.0754}, {"x":2.3162,"y":128.0827}, {"x":2.3149,"y":128.089},
+                {"x":2.3122,"y":128.0957}, {"x":2.3087,"y":128.1024}, {"x":2.3052,"y":128.109}, {"x":2.3015,"y":128.115},
+                {"x":2.2989,"y":128.1213}, {"x":2.2965,"y":128.1278}, {"x":2.2948,"y":128.1345}, {"x":2.2938,"y":128.1406},
+                {"x":2.2933,"y":128.1481}, {"x":2.2921,"y":128.1546}, {"x":2.2898,"y":128.1611}, {"x":2.2888,"y":128.1672},
+                {"x":2.2862,"y":128.1724}, {"x":2.283,"y":128.1774}, {"x":2.2796,"y":128.1818}, {"x":2.2769,"y":128.1873},
+                {"x":2.2742,"y":128.1921}, {"x":2.2721,"y":128.1953}, {"x":2.271,"y":128.1969}, {"x":2.2699,"y":128.1973},
+                {"x":2.2687,"y":128.1983}, {"x":2.2676,"y":128.2013}, {"x":2.266,"y":128.2052}, {"x":2.2647,"y":128.2104},
+                {"x":2.2628,"y":128.2163}, {"x":2.2603,"y":128.2231}, {"x":2.2569,"y":128.2323}, {"x":2.2539,"y":128.2415},
+                {"x":2.2519,"y":128.2505}, {"x":2.2505,"y":128.2602}, {"x":2.2503,"y":128.2712}, {"x":2.2507,"y":128.2833},
+                {"x":2.251,"y":128.2974}, {"x":2.2522,"y":128.3129}, {"x":2.2541,"y":128.3305}, {"x":2.2561,"y":128.35},
+                {"x":2.2573,"y":128.3705}, {"x":2.2582,"y":128.3912}, {"x":2.2588,"y":128.4124}, {"x":2.2603,"y":128.4343},
+                {"x":2.2625,"y":128.4578}, {"x":2.265,"y":128.4831}, {"x":2.2677,"y":128.51}, {"x":2.2696,"y":128.5342},
+                {"x":2.271,"y":128.5583}, {"x":2.2729,"y":128.5806}, {"x":2.2755,"y":128.6017}, {"x":2.2783,"y":128.621},
+                {"x":2.2807,"y":128.6366}, {"x":2.2829,"y":128.6517}, {"x":2.2851,"y":128.6657}, {"x":2.2872,"y":128.6791},
+                {"x":2.2887,"y":128.6896}, {"x":2.2905,"y":128.6961}, {"x":2.2918,"y":128.7005}, {"x":2.2933,"y":128.7035},
+                {"x":2.2948,"y":128.7051}, {"x":2.2955,"y":128.7078}, {"x":2.2961,"y":128.7118}, {"x":2.297,"y":128.7171},
+                {"x":2.2988,"y":128.7238}, {"x":2.3013,"y":128.7308}, {"x":2.3031,"y":128.7368}, {"x":2.3045,"y":128.742},
+                {"x":2.3054,"y":128.7485}, {"x":2.3069,"y":128.7561}, {"x":2.3083,"y":128.7663}, {"x":2.3093,"y":128.7774},
+                {"x":2.3104,"y":128.7905}, {"x":2.3115,"y":128.804}, {"x":2.3122,"y":128.8166}, {"x":2.3134,"y":128.8286},
+                {"x":2.3142,"y":128.8407}, {"x":2.3151,"y":128.8504}, {"x":2.3158,"y":128.8576}, {"x":2.3168,"y":128.8654},
+                {"x":2.3175,"y":128.8719}, {"x":2.3185,"y":128.879}, {"x":2.3188,"y":128.8856}, {"x":2.3193,"y":128.8926},
+                {"x":2.3204,"y":128.9038}, {"x":2.321,"y":128.9149}, {"x":2.3209,"y":128.925}, {"x":2.3197,"y":128.9327},
+                {"x":2.3187,"y":128.9416}, {"x":2.3179,"y":128.9501}, {"x":2.3174,"y":128.9576}, {"x":2.3173,"y":128.966},
+                {"x":2.3178,"y":128.9754}, {"x":2.3182,"y":128.9856}, {"x":2.3184,"y":128.9961}, {"x":2.3179,"y":129.0063},
+                {"x":2.3171,"y":129.0163}, {"x":2.3162,"y":129.0267}, {"x":2.3149,"y":129.0357}, {"x":2.3122,"y":129.042},
+                {"x":2.3087,"y":129.0487}, {"x":2.3052,"y":129.0551}, {"x":2.3015,"y":129.0611}, {"x":2.2989,"y":129.0664},
+                {"x":2.2965,"y":129.0717}, {"x":2.2948,"y":129.076}, {"x":2.2938,"y":129.0789}, {"x":2.2933,"y":129.0805},
+                {"x":2.2921,"y":129.0805}, {"x":2.2898,"y":129.0772}, {"x":2.2888,"y":129.0736}, {"x":2.2862,"y":129.0682},
+                {"x":2.283,"y":129.0619}, {"x":2.2796,"y":129.0538}, {"x":2.2769,"y":129.046}, {"x":2.2742,"y":129.0382},
+                {"x":2.2721,"y":129.0315}, {"x":2.271,"y":129.027}, {"x":2.2699,"y":129.0232}, {"x":2.2687,"y":129.0201},
+                {"x":2.2676,"y":129.0171}, {"x":2.266,"y":129.0142}, {"x":2.2647,"y":129.0116}, {"x":2.2628,"y":129.0101},
+                {"x":2.2603,"y":129.009}, {"x":2.2569,"y":129.0101}, {"x":2.2539,"y":129.013}, {"x":2.2519,"y":129.0175},
+                {"x":2.2505,"y":129.0235}, {"x":2.2503,"y":129.031}, {"x":2.2507,"y":129.0398}, {"x":2.251,"y":129.0494},
+                {"x":2.2522,"y":129.0611}, {"x":2.2541,"y":129.0754}, {"x":2.2561,"y":129.091}, {"x":2.2573,"y":129.1084},
+                {"x":2.2582,"y":129.1274}, {"x":2.2588,"y":129.1462}, {"x":2.2603,"y":129.167}, {"x":2.2625,"y":129.1894},
+                {"x":2.265,"y":129.2139}, {"x":2.2677,"y":129.2374}, {"x":2.2696,"y":129.2592}, {"x":2.271,"y":129.2783},
+                {"x":2.2729,"y":129.2948}, {"x":2.2755,"y":129.3093}, {"x":2.2783,"y":129.3243}, {"x":2.2807,"y":129.3403},
+                {"x":2.2829,"y":129.3563}, {"x":2.2851,"y":129.3719}, {"x":2.2872,"y":129.3876}, {"x":2.2887,"y":129.4005},
+                {"x":2.2905,"y":129.4093}, {"x":2.2918,"y":129.4121}, {"x":2.2933,"y":129.4144}, {"x":2.2948,"y":129.4148},
+                {"x":2.2955,"y":129.4158}, {"x":2.2961,"y":129.4187}, {"x":2.297,"y":129.4239}, {"x":2.2988,"y":129.4319},
+                {"x":2.3013,"y":129.4409}, {"x":2.3031,"y":129.4497}, {"x":2.3045,"y":129.4582}, {"x":2.3054,"y":129.467},
+                {"x":2.3069,"y":129.4767}, {"x":2.3083,"y":129.4891}, {"x":2.3093,"y":129.5029}, {"x":2.3104,"y":129.5186},
+                {"x":2.3115,"y":129.5358}, {"x":2.3122,"y":129.5539}, {"x":2.3134,"y":129.5709}, {"x":2.3142,"y":129.5843},
+                {"x":2.3151,"y":129.5966}, {"x":2.3158,"y":129.6083}, {"x":2.3168,"y":129.6171}, {"x":2.3175,"y":129.6247},
+                {"x":2.3185,"y":129.6318}, {"x":2.3188,"y":129.6389}, {"x":2.3193,"y":129.6457}, {"x":2.3204,"y":129.6587},
+                {"x":2.321,"y":129.6705}, {"x":2.3209,"y":129.6826}, {"x":2.3197,"y":129.6923}, {"x":2.3187,"y":129.7025},
+                {"x":2.3179,"y":129.7126}, {"x":2.3174,"y":129.721}, {"x":2.3173,"y":129.7294}, {"x":2.3178,"y":129.7397},
+                {"x":2.3182,"y":129.7505}, {"x":2.3184,"y":129.761}, {"x":2.3179,"y":129.7713}, {"x":2.3171,"y":129.7801},
+                {"x":2.3162,"y":129.7891}, {"x":2.3149,"y":129.7972}, {"x":2.3122,"y":129.8028}, {"x":2.3087,"y":129.808},
+                {"x":2.3052,"y":129.812}, {"x":2.3015,"y":129.8166}, {"x":2.2989,"y":129.8213}, {"x":2.2965,"y":129.8262},
+                {"x":2.2948,"y":129.831}, {"x":2.2938,"y":129.8344}, {"x":2.2933,"y":129.8375}, {"x":2.2921,"y":129.8398},
+                {"x":2.2898,"y":129.8407}, {"x":2.2888,"y":129.8407}, {"x":2.2862,"y":129.8396}, {"x":2.283,"y":129.8372},
+                {"x":2.2796,"y":129.8339}, {"x":2.2769,"y":129.8306}, {"x":2.2742,"y":129.8273}, {"x":2.2721,"y":129.8239},
+                {"x":2.271,"y":129.8209}, {"x":2.2699,"y":129.8183}, {"x":2.2687,"y":129.8163}, {"x":2.2676,"y":129.8161},
+                {"x":2.266,"y":129.8173}, {"x":2.2647,"y":129.8207}, {"x":2.2628,"y":129.8256}, {"x":2.2603,"y":129.8322},
+                {"x":2.2569,"y":129.8427}, {"x":2.2539,"y":129.8553}, {"x":2.2519,"y":129.8696}, {"x":2.2505,"y":129.8856},
+                {"x":2.2503,"y":129.9022}, {"x":2.2507,"y":129.919}, {"x":2.251,"y":129.9363}, {"x":2.2522,"y":129.9535},
+                {"x":2.2541,"y":129.9708}, {"x":2.2561,"y":129.9882}, {"x":2.2573,"y":130.0053}, {"x":2.2582,"y":130.0213},
+                {"x":2.2588,"y":130.0366}, {"x":2.2603,"y":130.0526}, {"x":2.2625,"y":130.0694}, {"x":2.265,"y":130.0863},
+                {"x":2.2677,"y":130.1017}, {"x":2.2696,"y":130.1136}, {"x":2.271,"y":130.1232}, {"x":2.2729,"y":130.131},
+                {"x":2.2755,"y":130.14}, {"x":2.2783,"y":130.1511}, {"x":2.2807,"y":130.1633}, {"x":2.2829,"y":130.1762},
+                {"x":2.2851,"y":130.1895}, {"x":2.2872,"y":130.2014}, {"x":2.2887,"y":130.2104}, {"x":2.2905,"y":130.2163},
+                {"x":2.2918,"y":130.2177}, {"x":2.2933,"y":130.2185}, {"x":2.2948,"y":130.2178}, {"x":2.2955,"y":130.2173},
+                {"x":2.2961,"y":130.219}, {"x":2.297,"y":130.2238}, {"x":2.2988,"y":130.2319}, {"x":2.3013,"y":130.2415},
+                {"x":2.3031,"y":130.2515}, {"x":2.3045,"y":130.2622}, {"x":2.3054,"y":130.2727}, {"x":2.3069,"y":130.2849},
+                {"x":2.3083,"y":130.2995}, {"x":2.3093,"y":130.3159}, {"x":2.3104,"y":130.3341}, {"x":2.3115,"y":130.3533},
+                {"x":2.3122,"y":130.3727}, {"x":2.3134,"y":130.3923}, {"x":2.3142,"y":130.4109}, {"x":2.3151,"y":130.4286},
+                {"x":2.3158,"y":130.4447}, {"x":2.3168,"y":130.4593}, {"x":2.3175,"y":130.472}, {"x":2.3185,"y":130.4851},
+                {"x":2.3188,"y":130.498}, {"x":2.3193,"y":130.5103}, {"x":2.3204,"y":130.5284}, {"x":2.321,"y":130.5451},
+                {"x":2.3209,"y":130.562}, {"x":2.3197,"y":130.5746}, {"x":2.3187,"y":130.5878}, {"x":2.3179,"y":130.6009},
+                {"x":2.3174,"y":130.6122}, {"x":2.3173,"y":130.6225}, {"x":2.3178,"y":130.6353}, {"x":2.3182,"y":130.6481},
+                {"x":2.3184,"y":130.6606}, {"x":2.3179,"y":130.6724}, {"x":2.3171,"y":130.6833}, {"x":2.3162,"y":130.6946},
+                {"x":2.3149,"y":130.7047}, {"x":2.3122,"y":130.7107}, {"x":2.3087,"y":130.7151}, {"x":2.3052,"y":130.7183},
+                {"x":2.3015,"y":130.722}, {"x":2.2989,"y":130.7258}, {"x":2.2965,"y":130.7291}, {"x":2.2948,"y":130.7303},
+                {"x":2.2938,"y":130.7308}, {"x":2.2933,"y":130.7305}, {"x":2.2921,"y":130.729}, {"x":2.2898,"y":130.7262},
+                {"x":2.2888,"y":130.724}, {"x":2.2862,"y":130.7201}, {"x":2.283,"y":130.7153}, {"x":2.2796,"y":130.7099},
+                {"x":2.2769,"y":130.7037}, {"x":2.2742,"y":130.6974}, {"x":2.2721,"y":130.6923}, {"x":2.271,"y":130.6888},
+                {"x":2.2699,"y":130.6853}, {"x":2.2687,"y":130.6837}, {"x":2.2676,"y":130.6836}, {"x":2.266,"y":130.6851},
+                {"x":2.2647,"y":130.6882}, {"x":2.2628,"y":130.6928}, {"x":2.2603,"y":130.6996}, {"x":2.2569,"y":130.7104},
+                {"x":2.2539,"y":130.7231}, {"x":2.2519,"y":130.7381}, {"x":2.2505,"y":130.754}, {"x":2.2503,"y":130.7713},
+                {"x":2.2507,"y":130.7891}, {"x":2.251,"y":130.8066}, {"x":2.2522,"y":130.8249}, {"x":2.2541,"y":130.8437},
+                {"x":2.2561,"y":130.8624}, {"x":2.2573,"y":130.8809}, {"x":2.2582,"y":130.8996}, {"x":2.2588,"y":130.9174},
+                {"x":2.2603,"y":130.9351}, {"x":2.2625,"y":130.9529}, {"x":2.265,"y":130.9705}, {"x":2.2677,"y":130.9882},
+                {"x":2.2696,"y":131.0049}, {"x":2.271,"y":131.0205}, {"x":2.2729,"y":131.0347}, {"x":2.2755,"y":131.0475},
+                {"x":2.2783,"y":131.0583}, {"x":2.2807,"y":131.0664}, {"x":2.2829,"y":131.0718}, {"x":2.2851,"y":131.0748},
+                {"x":2.2872,"y":131.0754}, {"x":2.2887,"y":131.0747}, {"x":2.2905,"y":131.072}, {"x":2.2918,"y":131.0682},
+                {"x":2.2933,"y":131.0638}, {"x":2.2948,"y":131.0592}, {"x":2.2955,"y":131.0549}, {"x":2.2961,"y":131.052},
+                {"x":2.297,"y":131.0514}, {"x":2.2988,"y":131.0548}, {"x":2.3013,"y":131.0617}, {"x":2.3031,"y":131.0718},
+                {"x":2.3045,"y":131.0831}, {"x":2.3054,"y":131.0963}, {"x":2.3069,"y":131.111}, {"x":2.3083,"y":131.1278},
+                {"x":2.3093,"y":131.1465}, {"x":2.3104,"y":131.1666}, {"x":2.3115,"y":131.1878}, {"x":2.3122,"y":131.2097},
+                {"x":2.3134,"y":131.2319}, {"x":2.3142,"y":131.252}, {"x":2.3151,"y":131.2721}, {"x":2.3158,"y":131.2911},
+                {"x":2.3168,"y":131.3083}, {"x":2.3175,"y":131.3238}, {"x":2.3185,"y":131.3392}, {"x":2.3188,"y":131.3533},
+                {"x":2.3193,"y":131.3664}, {"x":2.3204,"y":131.3831}, {"x":2.321,"y":131.399}, {"x":2.3209,"y":131.4136},
+                {"x":2.3197,"y":131.4243}, {"x":2.3187,"y":131.4363}, {"x":2.3179,"y":131.448}, {"x":2.3174,"y":131.4589},
+                {"x":2.3173,"y":131.4705}, {"x":2.3178,"y":131.4831}, {"x":2.3182,"y":131.496}, {"x":2.3184,"y":131.5074},
+                {"x":2.3179,"y":131.5173}, {"x":2.3171,"y":131.527}, {"x":2.3162,"y":131.537}, {"x":2.3149,"y":131.5478},
+                {"x":2.3122,"y":131.5583}, {"x":2.3087,"y":131.5645}, {"x":2.3052,"y":131.5678}, {"x":2.3015,"y":131.5718},
+                {"x":2.2989,"y":131.5765}, {"x":2.2965,"y":131.5802}, {"x":2.2948,"y":131.5818}, {"x":2.2938,"y":131.5828},
+                {"x":2.2933,"y":131.5841}, {"x":2.2921,"y":131.5866}, {"x":2.2898,"y":131.5901}, {"x":2.2888,"y":131.5936},
+                {"x":2.2862,"y":131.5966}, {"x":2.283,"y":131.5982}, {"x":2.2796,"y":131.5997}, {"x":2.2769,"y":131.6025},
+                {"x":2.2742,"y":131.606}, {"x":2.2721,"y":131.6101}, {"x":2.271,"y":131.6144}, {"x":2.2699,"y":131.6186},
+                {"x":2.2687,"y":131.6231}, {"x":2.2676,"y":131.6291}, {"x":2.266,"y":131.636}, {"x":2.2647,"y":131.644},
+                {"x":2.2628,"y":131.6534}, {"x":2.2603,"y":131.6644}, {"x":2.2569,"y":131.6775}, {"x":2.2539,"y":131.6917},
+                {"x":2.2519,"y":131.7062}, {"x":2.2505,"y":131.7226}, {"x":2.2503,"y":131.7408}, {"x":2.2507,"y":131.761},
+                {"x":2.251,"y":131.7824}, {"x":2.2522,"y":131.8055}, {"x":2.2541,"y":131.8315}, {"x":2.2561,"y":131.8596},
+                {"x":2.2573,"y":131.8906}, {"x":2.2582,"y":131.9248}, {"x":2.2588,"y":131.9616}, {"x":2.2603,"y":132.0006},
+                {"x":2.2625,"y":132.042}, {"x":2.265,"y":132.0833}, {"x":2.2677,"y":132.1248}, {"x":2.2696,"y":132.1648},
+                {"x":2.271,"y":132.2023}, {"x":2.2729,"y":132.2385}, {"x":2.2755,"y":132.2731}, {"x":2.2783,"y":132.3052},
+                {"x":2.2807,"y":132.3364}, {"x":2.2829,"y":132.366}, {"x":2.2851,"y":132.3957}, {"x":2.2872,"y":132.4239},
+                {"x":2.2887,"y":132.4497}, {"x":2.2905,"y":132.4697}, {"x":2.2918,"y":132.4839}, {"x":2.2933,"y":132.4921},
+                {"x":2.2948,"y":132.4947}, {"x":2.2955,"y":132.4944}, {"x":2.2961,"y":132.4948}, {"x":2.297,"y":132.4984},
+                {"x":2.2988,"y":132.5061}, {"x":2.3013,"y":132.5165}, {"x":2.3031,"y":132.5278}, {"x":2.3045,"y":132.5392},
+                {"x":2.3054,"y":132.5492}, {"x":2.3069,"y":132.5583}, {"x":2.3083,"y":132.5647}, {"x":2.3093,"y":132.569},
+                {"x":2.3104,"y":132.5721}, {"x":2.3115,"y":132.5739}, {"x":2.3122,"y":132.5752}, {"x":2.3134,"y":132.576},
+                {"x":2.3142,"y":132.5768}, {"x":2.3151,"y":132.577}, {"x":2.3158,"y":132.5772}, {"x":2.3168,"y":132.5769},
+                {"x":2.3175,"y":132.575}, {"x":2.3185,"y":132.5731}, {"x":2.3188,"y":132.5714}, {"x":2.3193,"y":132.5694},
+                {"x":2.3204,"y":132.5661}, {"x":2.321,"y":132.5627}, {"x":2.3209,"y":132.5593}, {"x":2.3197,"y":132.5559},
+                {"x":2.3187,"y":132.5528}, {"x":2.3179,"y":132.5497}, {"x":2.3174,"y":132.5469}, {"x":2.3173,"y":132.5451},
+                {"x":2.3178,"y":132.544}, {"x":2.3182,"y":132.544}, {"x":2.3184,"y":132.5451}, {"x":2.3179,"y":132.5467},
+                {"x":2.3171,"y":132.5487}, {"x":2.3162,"y":132.5505}, {"x":2.3149,"y":132.5525}, {"x":2.3122,"y":132.554},
+                {"x":2.3087,"y":132.5549}, {"x":2.3052,"y":132.5552}, {"x":2.3015,"y":132.5558}, {"x":2.2989,"y":132.5562},
+                {"x":2.2965,"y":132.5566}, {"x":2.2948,"y":132.5567}, {"x":2.2938,"y":132.5566}, {"x":2.2933,"y":132.5566},
+                {"x":2.2921,"y":132.5566}, {"x":2.2898,"y":132.5571}, {"x":2.2888,"y":132.5574}, {"x":2.2862,"y":132.558},
+                {"x":2.283,"y":132.5583}, {"x":2.2796,"y":132.5584}, {"x":2.2769,"y":132.5595}, {"x":2.2742,"y":132.5606},
+                {"x":2.2721,"y":132.5619}, {"x":2.271,"y":132.5629}, {"x":2.2699,"y":132.5638}, {"x":2.2687,"y":132.5644},
+                {"x":2.2676,"y":132.5654}, {"x":2.266,"y":132.566}, {"x":2.2647,"y":132.5665}, {"x":2.2628,"y":132.5676},
+                {"x":2.2603,"y":132.569}, {"x":2.2569,"y":132.5714}, {"x":2.2539,"y":132.574}, {"x":2.2519,"y":132.5772},
+                {"x":2.2505,"y":132.5815}, {"x":2.2503,"y":132.5873}, {"x":2.2507,"y":132.5947}, {"x":2.251,"y":132.6025},
+                {"x":2.2522,"y":132.6108}, {"x":2.2541,"y":132.6199}, {"x":2.2561,"y":132.6293}, {"x":2.2573,"y":132.6385},
+                {"x":2.2582,"y":132.6482}, {"x":2.2588,"y":132.658}, {"x":2.2603,"y":132.6681}, {"x":2.2625,"y":132.6788},
+                {"x":2.265,"y":132.6896}, {"x":2.2677,"y":132.7001}, {"x":2.2696,"y":132.7107}, {"x":2.271,"y":132.7208},
+                {"x":2.2729,"y":132.7302}, {"x":2.2755,"y":132.7397}, {"x":2.2783,"y":132.7501}, {"x":2.2807,"y":132.7601},
+                {"x":2.2829,"y":132.7712}, {"x":2.2851,"y":132.7831}, {"x":2.2872,"y":132.7951}, {"x":2.2887,"y":132.8055},
+                {"x":2.2905,"y":132.8131}, {"x":2.2918,"y":132.8166}, {"x":2.2933,"y":132.8181}, {"x":2.2948,"y":132.8179},
+                {"x":2.2955,"y":132.8183}, {"x":2.2961,"y":132.8201}, {"x":2.297,"y":132.8241}, {"x":2.2988,"y":132.8302},
+                {"x":2.3013,"y":132.8385}, {"x":2.3031,"y":132.8488}, {"x":2.3045,"y":132.8592}, {"x":2.3054,"y":132.8702},
+                {"x":2.3069,"y":132.8817}, {"x":2.3083,"y":132.8943}, {"x":2.3093,"y":132.9066}, {"x":2.3104,"y":132.9188},
+                {"x":2.3115,"y":132.9309}, {"x":2.3122,"y":132.9421}, {"x":2.3134,"y":132.9526}, {"x":2.3142,"y":132.9616},
+                {"x":2.3151,"y":132.9696}, {"x":2.3158,"y":132.9774}, {"x":2.3168,"y":132.9839}, {"x":2.3175,"y":132.9882},
+                {"x":2.3185,"y":132.9912}, {"x":2.3188,"y":132.9926}, {"x":2.3193,"y":132.9934}, {"x":2.3204,"y":132.9929},
+                {"x":2.321,"y":132.9904}, {"x":2.3209,"y":132.9871}, {"x":2.3197,"y":132.983}, {"x":2.3187,"y":132.9782},
+                {"x":2.3179,"y":132.9734}, {"x":2.3174,"y":132.9688}, {"x":2.3173,"y":132.9649}, {"x":2.3178,"y":132.9613},
+                {"x":2.3182,"y":132.958}, {"x":2.3184,"y":132.9554}, {"x":2.3179,"y":132.9535}, {"x":2.3171,"y":132.9525},
+                {"x":2.3162,"y":132.9525}, {"x":2.3149,"y":132.9538}, {"x":2.3122,"y":132.9556}, {"x":2.3087,"y":132.9566},
+                {"x":2.3052,"y":132.9566}, {"x":2.3015,"y":132.9566}, {"x":2.2989,"y":132.9566}, {"x":2.2965,"y":132.9575},
+                {"x":2.2948,"y":132.9598}, {"x":2.2938,"y":132.9622}, {"x":2.2933,"y":132.9645}, {"x":2.2921,"y":132.9669},
+                {"x":2.2898,"y":132.9702}, {"x":2.2888,"y":132.9729}, {"x":2.2862,"y":132.9754}, {"x":2.283,"y":132.9772},
+                {"x":2.2796,"y":132.9785}, {"x":2.2769,"y":132.9801}, {"x":2.2742,"y":132.9818}, {"x":2.2721,"y":132.9837},
+                {"x":2.271,"y":132.9856}, {"x":2.2699,"y":132.988}, {"x":2.2687,"y":132.9904}, {"x":2.2676,"y":132.9934},
+                {"x":2.266,"y":132.9975}, {"x":2.2647,"y":133.0028}, {"x":2.2628,"y":133.009}, {"x":2.2603,"y":133.0163},
+                {"x":2.2569,"y":133.0275}, {"x":2.2539,"y":133.0401}, {"x":2.2519,"y":133.053}, {"x":2.2505,"y":133.0673},
+                {"x":2.2503,"y":133.0831}, {"x":2.2507,"y":133.1002}, {"x":2.251,"y":133.1172}, {"x":2.2522,"y":133.1345},
+                {"x":2.2541,"y":133.1517}, {"x":2.2561,"y":133.1691}, {"x":2.2573,"y":133.1856}, {"x":2.2582,"y":133.2014},
+                {"x":2.2588,"y":133.2177}, {"x":2.2603,"y":133.2341}, {"x":2.2625,"y":133.2504}, {"x":2.265,"y":133.2673},
+                {"x":2.2677,"y":133.2831}, {"x":2.2696,"y":133.298}, {"x":2.271,"y":133.3108}, {"x":2.2729,"y":133.3216},
+                {"x":2.2755,"y":133.332}, {"x":2.2783,"y":133.3421}, {"x":2.2807,"y":133.3516}, {"x":2.2829,"y":133.3611},
+                {"x":2.2851,"y":133.371}, {"x":2.2872,"y":133.3804}, {"x":2.2887,"y":133.3891}, {"x":2.2905,"y":133.3965},
+                {"x":2.2918,"y":133.3995}, {"x":2.2933,"y":133.4005}, {"x":2.2948,"y":133.4011}, {"x":2.2955,"y":133.4024},
+                {"x":2.2961,"y":133.404}, {"x":2.297,"y":133.4077}, {"x":2.2988,"y":133.414}, {"x":2.3013,"y":133.4221},
+                {"x":2.3031,"y":133.4312}, {"x":2.3045,"y":133.4402}, {"x":2.3054,"y":133.4497}, {"x":2.3069,"y":133.4616},
+                {"x":2.3083,"y":133.4754}, {"x":2.3093,"y":133.4907}, {"x":2.3104,"y":133.5074}, {"x":2.3115,"y":133.5244},
+                {"x":2.3122,"y":133.5413}, {"x":2.3134,"y":133.5574}, {"x":2.3142,"y":133.5714}, {"x":2.3151,"y":133.5844},
+                {"x":2.3158,"y":133.5962}, {"x":2.3168,"y":133.6069}, {"x":2.3175,"y":133.6159}, {"x":2.3185,"y":133.625},
+                {"x":2.3188,"y":133.6331}, {"x":2.3193,"y":133.6402}, {"x":2.3204,"y":133.6521}, {"x":2.321,"y":133.6631},
+                {"x":2.3209,"y":133.673}, {"x":2.3197,"y":133.6816}, {"x":2.3187,"y":133.6901}, {"x":2.3179,"y":133.6991},
+                {"x":2.3174,"y":133.7073}, {"x":2.3173,"y":133.7161}, {"x":2.3178,"y":133.7258}, {"x":2.3182,"y":133.7366},
+                {"x":2.3184,"y":133.7468}, {"x":2.3179,"y":133.7554}, {"x":2.3171,"y":133.7644}, {"x":2.3162,"y":133.7745},
+                {"x":2.3149,"y":133.7849}, {"x":2.3122,"y":133.7915}, {"x":2.3087,"y":133.7977}, {"x":2.3052,"y":133.8016},
+                {"x":2.3015,"y":133.8049}, {"x":2.2989,"y":133.8078}, {"x":2.2965,"y":133.811}, {"x":2.2948,"y":133.8136},
+                {"x":2.2938,"y":133.8148}, {"x":2.2933,"y":133.8156}, {"x":2.2921,"y":133.8166}, {"x":2.2898,"y":133.8184},
+                {"x":2.2888,"y":133.8201}, {"x":2.2862,"y":133.8228}, {"x":2.283,"y":133.8251}, {"x":2.2796,"y":133.8266},
+                {"x":2.2769,"y":133.8272}, {"x":2.2742,"y":133.8281}, {"x":2.2721,"y":133.8291}, {"x":2.271,"y":133.8299},
+                {"x":2.2699,"y":133.8315}, {"x":2.2687,"y":133.8344}, {"x":2.2676,"y":133.8389}, {"x":2.266,"y":133.8446},
+                {"x":2.2647,"y":133.8522}, {"x":2.2628,"y":133.8614}, {"x":2.2603,"y":133.8718}, {"x":2.2569,"y":133.8864},
+                {"x":2.2539,"y":133.9019}, {"x":2.2519,"y":133.917}, {"x":2.2505,"y":133.9317}, {"x":2.2503,"y":133.9472},
+                {"x":2.2507,"y":133.963}, {"x":2.251,"y":133.9774}, {"x":2.2522,"y":133.9916}, {"x":2.2541,"y":134.0049},
+                {"x":2.2561,"y":134.0177}, {"x":2.2573,"y":134.0298}, {"x":2.2582,"y":134.0416}, {"x":2.2588,"y":134.0535},
+                {"x":2.2603,"y":134.0673}, {"x":2.2625,"y":134.0818}, {"x":2.265,"y":134.0954}, {"x":2.2677,"y":134.1082},
+                {"x":2.2696,"y":134.1193}, {"x":2.271,"y":134.1278}, {"x":2.2729,"y":134.1352}, {"x":2.2755,"y":134.143},
+                {"x":2.2783,"y":134.1528}, {"x":2.2807,"y":134.164}, {"x":2.2829,"y":134.1752}, {"x":2.2851,"y":134.1867},
+                {"x":2.2872,"y":134.1983}, {"x":2.2887,"y":134.2097}, {"x":2.2905,"y":134.2198}, {"x":2.2918,"y":134.2255},
+                {"x":2.2933,"y":134.2281}, {"x":2.2948,"y":134.2285}, {"x":2.2955,"y":134.2291}, {"x":2.2961,"y":134.2309},
+                {"x":2.297,"y":134.2341}, {"x":2.2988,"y":134.2403}, {"x":2.3013,"y":134.2483}, {"x":2.3031,"y":134.2562},
+                {"x":2.3045,"y":134.264}, {"x":2.3054,"y":134.2716}, {"x":2.3069,"y":134.2807}, {"x":2.3083,"y":134.2908},
+                {"x":2.3093,"y":134.3015}, {"x":2.3104,"y":134.3125}, {"x":2.3115,"y":134.3235}, {"x":2.3122,"y":134.3338},
+                {"x":2.3134,"y":134.3431}, {"x":2.3142,"y":134.3512}, {"x":2.3151,"y":134.3585}, {"x":2.3158,"y":134.3644},
+                {"x":2.3168,"y":134.369}, {"x":2.3175,"y":134.3725}, {"x":2.3185,"y":134.3756}, {"x":2.3188,"y":134.3781},
+                {"x":2.3193,"y":134.3801}, {"x":2.3204,"y":134.3822}, {"x":2.321,"y":134.3845}, {"x":2.3209,"y":134.3862},
+                {"x":2.3197,"y":134.3879}, {"x":2.3187,"y":134.39}, {"x":2.3179,"y":134.3921}, {"x":2.3174,"y":134.3942},
+                {"x":2.3173,"y":134.397}, {"x":2.3178,"y":134.4007}, {"x":2.3182,"y":134.4049}, {"x":2.3184,"y":134.4087},
+                {"x":2.3179,"y":134.4116}, {"x":2.3171,"y":134.4148}, {"x":2.3162,"y":134.4187}, {"x":2.3149,"y":134.4239},
+                {"x":2.3122,"y":134.4293}, {"x":2.3087,"y":134.433}, {"x":2.3052,"y":134.435}, {"x":2.3015,"y":134.4363},
+                {"x":2.2989,"y":134.4373}, {"x":2.2965,"y":134.4377}, {"x":2.2948,"y":134.438}, {"x":2.2938,"y":134.4382},
+                {"x":2.2933,"y":134.4383}, {"x":2.2921,"y":134.4384}, {"x":2.2898,"y":134.4391}, {"x":2.2888,"y":134.4397},
+                {"x":2.2862,"y":134.4407}, {"x":2.283,"y":134.442}, {"x":2.2796,"y":134.4431}, {"x":2.2769,"y":134.4442},
+                {"x":2.2742,"y":134.4455}, {"x":2.2721,"y":134.4468}, {"x":2.271,"y":134.4481}, {"x":2.2699,"y":134.4497},
+                {"x":2.2687,"y":134.4516}, {"x":2.2676,"y":134.4542}, {"x":2.266,"y":134.4578}, {"x":2.2647,"y":134.4623},
+                {"x":2.2628,"y":134.4678}, {"x":2.2603,"y":134.4746}, {"x":2.2569,"y":134.4841}, {"x":2.2539,"y":134.4947},
+                {"x":2.2519,"y":134.506}, {"x":2.2505,"y":134.5186}, {"x":2.2503,"y":134.5327}, {"x":2.2507,"y":134.5478},
+                {"x":2.251,"y":134.5636}, {"x":2.2522,"y":134.5802}, {"x":2.2541,"y":134.5975}, {"x":2.2561,"y":134.6152},
+                {"x":2.2573,"y":134.6321}, {"x":2.2582,"y":134.6481}, {"x":2.2588,"y":134.665}, {"x":2.2603,"y":134.6826},
+                {"x":2.2625,"y":134.6997}, {"x":2.265,"y":134.7171}, {"x":2.2677,"y":134.7346}, {"x":2.2696,"y":134.7505},
+                {"x":2.271,"y":134.7643}, {"x":2.2729,"y":134.7766}, {"x":2.2755,"y":134.7877}, {"x":2.2783,"y":134.7981},
+                {"x":2.2807,"y":134.8082}, {"x":2.2829,"y":134.8183}, {"x":2.2851,"y":134.8288}, {"x":2.2872,"y":134.8392},
+                {"x":2.2887,"y":134.8488}, {"x":2.2905,"y":134.8569}, {"x":2.2918,"y":134.8624}, {"x":2.2933,"y":134.8656},
+                {"x":2.2948,"y":134.8665}, {"x":2.2955,"y":134.8672}, {"x":2.2961,"y":134.8692}, {"x":2.297,"y":134.873},
+                {"x":2.2988,"y":134.8797}, {"x":2.3013,"y":134.8885}, {"x":2.3031,"y":134.8986}, {"x":2.3045,"y":134.9096},
+                {"x":2.3054,"y":134.921}, {"x":2.3069,"y":134.9333}, {"x":2.3083,"y":134.9464}, {"x":2.3093,"y":134.9602},
+                {"x":2.3104,"y":134.9744}, {"x":2.3115,"y":134.9893}, {"x":2.3122,"y":135.0048}, {"x":2.3134,"y":135.02},
+                {"x":2.3142,"y":135.0342}, {"x":2.3151,"y":135.0478}, {"x":2.3158,"y":135.0601}, {"x":2.3168,"y":135.0718},
+                {"x":2.3175,"y":135.0818}, {"x":2.3185,"y":135.091}, {"x":2.3188,"y":135.0991}, {"x":2.3193,"y":135.1059},
+                {"x":2.3204,"y":135.1167}, {"x":2.321,"y":135.1278}, {"x":2.3209,"y":135.1382}, {"x":2.3197,"y":135.1466},
+                {"x":2.3187,"y":135.1554}, {"x":2.3179,"y":135.165}, {"x":2.3174,"y":135.1741}, {"x":2.3173,"y":135.1837},
+                {"x":2.3178,"y":135.1952}, {"x":2.3182,"y":135.2079}, {"x":2.3184,"y":135.2198}, {"x":2.3179,"y":135.2312},
+                {"x":2.3171,"y":135.2415}, {"x":2.3162,"y":135.2514}, {"x":2.3149,"y":135.2606}, {"x":2.3122,"y":135.2662},
+                {"x":2.3087,"y":135.2713}, {"x":2.3052,"y":135.2736}, {"x":2.3015,"y":135.2758}, {"x":2.2989,"y":135.279},
+                {"x":2.2965,"y":135.2818}, {"x":2.2948,"y":135.2838}, {"x":2.2938,"y":135.2847}, {"x":2.2933,"y":135.2855},
+                {"x":2.2921,"y":135.2863}, {"x":2.2898,"y":135.2882}, {"x":2.2888,"y":135.2898}, {"x":2.2862,"y":135.2921},
+                {"x":2.283,"y":135.2943}, {"x":2.2796,"y":135.2962}, {"x":2.2769,"y":135.2974}, {"x":2.2742,"y":135.2981},
+                {"x":2.2721,"y":135.2987}, {"x":2.271,"y":135.2995}, {"x":2.2699,"y":135.3005}, {"x":2.2687,"y":135.3019},
+                {"x":2.2676,"y":135.3037}, {"x":2.266,"y":135.3061}, {"x":2.2647,"y":135.3093}, {"x":2.2628,"y":135.3134},
+                {"x":2.2603,"y":135.319}, {"x":2.2569,"y":135.327}, {"x":2.2539,"y":135.3371}, {"x":2.2519,"y":135.3486},
+                {"x":2.2505,"y":135.3611}, {"x":2.2503,"y":135.3752}, {"x":2.2507,"y":135.3907}, {"x":2.251,"y":135.4069},
+                {"x":2.2522,"y":135.4246}, {"x":2.2541,"y":135.4431}, {"x":2.2561,"y":135.4614}, {"x":2.2573,"y":135.4787},
+                {"x":2.2582,"y":135.4951}, {"x":2.2588,"y":135.5126}, {"x":2.2603,"y":135.531}, {"x":2.2625,"y":135.5498},
+                {"x":2.265,"y":135.5686}, {"x":2.2677,"y":135.5861}, {"x":2.2696,"y":135.6015}, {"x":2.271,"y":135.6133},
+                {"x":2.2729,"y":135.623}, {"x":2.2755,"y":135.6322}, {"x":2.2783,"y":135.6421}, {"x":2.2807,"y":135.6521},
+                {"x":2.2829,"y":135.6622}, {"x":2.2851,"y":135.6725}, {"x":2.2872,"y":135.6828}, {"x":2.2887,"y":135.6923},
+                {"x":2.2905,"y":135.7001}, {"x":2.2918,"y":135.7047}, {"x":2.2933,"y":135.7068}, {"x":2.2948,"y":135.7078},
+                {"x":2.2955,"y":135.7084}, {"x":2.2961,"y":135.7103}, {"x":2.297,"y":135.7142}, {"x":2.2988,"y":135.7203},
+                {"x":2.3013,"y":135.7283}, {"x":2.3031,"y":135.7381}, {"x":2.3045,"y":135.7485}, {"x":2.3054,"y":135.7588},
+                {"x":2.3069,"y":135.7702}, {"x":2.3083,"y":135.7828}, {"x":2.3093,"y":135.7954}, {"x":2.3104,"y":135.8087},
+                {"x":2.3115,"y":135.8222}, {"x":2.3122,"y":135.8341}, {"x":2.3134,"y":135.8456}, {"x":2.3142,"y":135.8559},
+                {"x":2.3151,"y":135.8654}, {"x":2.3158,"y":135.8741}, {"x":2.3168,"y":135.8816}, {"x":2.3175,"y":135.8872},
+                {"x":2.3185,"y":135.8926}, {"x":2.3188,"y":135.8974}, {"x":2.3193,"y":135.9019}, {"x":2.3204,"y":135.9077},
+                {"x":2.321,"y":135.9142}, {"x":2.3209,"y":135.9197}, {"x":2.3197,"y":135.9234}, {"x":2.3187,"y":135.9272},
+                {"x":2.3179,"y":135.9312}, {"x":2.3174,"y":135.9351}, {"x":2.3173,"y":135.939}, {"x":2.3178,"y":135.9439},
+                {"x":2.3182,"y":135.9496}, {"x":2.3184,"y":135.9554}, {"x":2.3179,"y":135.961}, {"x":2.3171,"y":135.9664},
+                {"x":2.3162,"y":135.9721}, {"x":2.3149,"y":135.9772}, {"x":2.3122,"y":135.9818}, {"x":2.3087,"y":135.9841},
+                {"x":2.3052,"y":135.9846}, {"x":2.3015,"y":135.985}, {"x":2.2989,"y":135.9863}, {"x":2.2965,"y":135.9877},
+                {"x":2.2948,"y":135.9886}, {"x":2.2938,"y":135.9891}, {"x":2.2933,"y":135.9893}, {"x":2.2921,"y":135.9893},
+                {"x":2.2898,"y":135.9897}, {"x":2.2888,"y":135.9904}, {"x":2.2862,"y":135.9912}, {"x":2.283,"y":135.992},
+                {"x":2.2796,"y":135.9927}, {"x":2.2769,"y":135.9937}, {"x":2.2742,"y":135.9946}, {"x":2.2721,"y":135.9959},
+                {"x":2.271,"y":135.9969}, {"x":2.2699,"y":135.9977}, {"x":2.2687,"y":135.9985}, {"x":2.2676,"y":135.9996},
+                {"x":2.266,"y":136.0016}, {"x":2.2647,"y":136.004}, {"x":2.2628,"y":136.0069}, {"x":2.2603,"y":136.0105},
+                {"x":2.2569,"y":136.0163}, {"x":2.2539,"y":136.0232}, {"x":2.2519,"y":136.031}, {"x":2.2505,"y":136.0398},
+                {"x":2.2503,"y":136.0503}, {"x":2.2507,"y":136.0621}, {"x":2.251,"y":136.0741}, {"x":2.2522,"y":136.087},
+                {"x":2.2541,"y":136.1009}, {"x":2.2561,"y":136.1154}, {"x":2.2573,"y":136.1302}, {"x":2.2582,"y":136.1451},
+                {"x":2.2588,"y":136.1601}, {"x":2.2603,"y":136.176}, {"x":2.2625,"y":136.1929}, {"x":2.265,"y":136.2104},
+                {"x":2.2677,"y":136.2273}, {"x":2.2696,"y":136.2415}, {"x":2.271,"y":136.253}, {"x":2.2729,"y":136.2626},
+                {"x":2.2755,"y":136.2704}, {"x":2.2783,"y":136.277}, {"x":2.2807,"y":136.2823}, {"x":2.2829,"y":136.2871},
+                {"x":2.2851,"y":136.2921}, {"x":2.2872,"y":136.297}, {"x":2.2887,"y":136.3015}, {"x":2.2905,"y":136.3048},
+                {"x":2.2918,"y":136.3069}, {"x":2.2933,"y":136.3079}, {"x":2.2948,"y":136.3079}, {"x":2.2955,"y":136.3087},
+                {"x":2.2961,"y":136.3108}, {"x":2.297,"y":136.315}, {"x":2.2988,"y":136.3223}, {"x":2.3013,"y":136.3315},
+                {"x":2.3031,"y":136.3416}, {"x":2.3045,"y":136.3516}, {"x":2.3054,"y":136.3614}, {"x":2.3069,"y":136.3725},
+                {"x":2.3083,"y":136.3845}, {"x":2.3093,"y":136.3968}, {"x":2.3104,"y":136.4098}, {"x":2.3115,"y":136.4229},
+                {"x":2.3122,"y":136.435}, {"x":2.3134,"y":136.4462}, {"x":2.3142,"y":136.4557}, {"x":2.3151,"y":136.4646},
+                {"x":2.3158,"y":136.4719}, {"x":2.3168,"y":136.4779}, {"x":2.3175,"y":136.4828}, {"x":2.3185,"y":136.4867},
+                {"x":2.3188,"y":136.4901}, {"x":2.3193,"y":136.4925}, {"x":2.3204,"y":136.4947}, {"x":2.321,"y":136.4965},
+                {"x":2.3209,"y":136.4975}, {"x":2.3197,"y":136.4977}, {"x":2.3187,"y":136.4981}, {"x":2.3179,"y":136.4996},
+                {"x":2.3174,"y":136.5015}, {"x":2.3173,"y":136.504}, {"x":2.3178,"y":136.508}, {"x":2.3182,"y":136.5126},
+                {"x":2.3184,"y":136.5169}, {"x":2.3179,"y":136.5204}, {"x":2.3171,"y":136.5241}, {"x":2.3162,"y":136.528},
+                {"x":2.3149,"y":136.5327}, {"x":2.3122,"y":136.5358}, {"x":2.3087,"y":136.5383}, {"x":2.3052,"y":136.5401},
+                {"x":2.3015,"y":136.5414}, {"x":2.2989,"y":136.5428}, {"x":2.2965,"y":136.544}, {"x":2.2948,"y":136.5447},
+                {"x":2.2938,"y":136.5449}, {"x":2.2933,"y":136.545}, {"x":2.2921,"y":136.5451}, {"x":2.2898,"y":136.5455},
+                {"x":2.2888,"y":136.5459}, {"x":2.2862,"y":136.5467}, {"x":2.283,"y":136.5476}, {"x":2.2796,"y":136.5483},
+                {"x":2.2769,"y":136.5491}, {"x":2.2742,"y":136.5498}, {"x":2.2721,"y":136.5505}, {"x":2.271,"y":136.551},
+                {"x":2.2699,"y":136.5516}, {"x":2.2687,"y":136.5524}, {"x":2.2676,"y":136.5532}, {"x":2.266,"y":136.5542},
+                {"x":2.2647,"y":136.5555}, {"x":2.2628,"y":136.5571}, {"x":2.2603,"y":136.5587}, {"x":2.2569,"y":136.5619},
+                {"x":2.2539,"y":136.5657}, {"x":2.2519,"y":136.5702}, {"x":2.2505,"y":136.5755}, {"x":2.2503,"y":136.5824},
+                {"x":2.2507,"y":136.5908}, {"x":2.251,"y":136.5996}, {"x":2.2522,"y":136.6087}, {"x":2.2541,"y":136.6191},
+                {"x":2.2561,"y":136.6302}, {"x":2.2573,"y":136.6416}, {"x":2.2582,"y":136.6521}, {"x":2.2588,"y":136.6631},
+                {"x":2.2603,"y":136.6748}, {"x":2.2625,"y":136.6872}, {"x":2.265,"y":136.6997}, {"x":2.2677,"y":136.7119},
+                {"x":2.2696,"y":136.721}, {"x":2.271,"y":136.728}, {"x":2.2729,"y":136.7346}, {"x":2.2755,"y":136.7411},
+                {"x":2.2783,"y":136.7475}, {"x":2.2807,"y":136.7533}, {"x":2.2829,"y":136.7593}, {"x":2.2851,"y":136.7661},
+                {"x":2.2872,"y":136.7728}, {"x":2.2887,"y":136.779}, {"x":2.2905,"y":136.7828}, {"x":2.2918,"y":136.7844},
+                {"x":2.2933,"y":136.7846}, {"x":2.2948,"y":136.7842}, {"x":2.2955,"y":136.7844}, {"x":2.2961,"y":136.7856},
+                {"x":2.297,"y":136.7885}, {"x":2.2988,"y":136.794}, {"x":2.3013,"y":136.8016}, {"x":2.3031,"y":136.81},
+                {"x":2.3045,"y":136.8184}, {"x":2.3054,"y":136.8267}, {"x":2.3069,"y":136.836}, {"x":2.3083,"y":136.8458},
+                {"x":2.3093,"y":136.8557}, {"x":2.3104,"y":136.8661}, {"x":2.3115,"y":136.877}, {"x":2.3122,"y":136.8867},
+                {"x":2.3134,"y":136.8954}, {"x":2.3142,"y":136.9031}, {"x":2.3151,"y":136.9101}, {"x":2.3158,"y":136.9157},
+                {"x":2.3168,"y":136.9202}, {"x":2.3175,"y":136.924}, {"x":2.3185,"y":136.9268}, {"x":2.3188,"y":136.9288},
+                {"x":2.3193,"y":136.9298}, {"x":2.3204,"y":136.9304}, {"x":2.321,"y":136.931}, {"x":2.3209,"y":136.9309},
+                {"x":2.3197,"y":136.9299}, {"x":2.3187,"y":136.9292}, {"x":2.3179,"y":136.9291}, {"x":2.3174,"y":136.9294},
+                {"x":2.3173,"y":136.9302}, {"x":2.3178,"y":136.932}, {"x":2.3182,"y":136.9344}, {"x":2.3184,"y":136.9366},
+                {"x":2.3179,"y":136.9388}, {"x":2.3171,"y":136.941}, {"x":2.3162,"y":136.9431}, {"x":2.3149,"y":136.9458},
+                {"x":2.3122,"y":136.9482}, {"x":2.3087,"y":136.9497}, {"x":2.3052,"y":136.9504}, {"x":2.3015,"y":136.9511},
+                {"x":2.2989,"y":136.9515}, {"x":2.2965,"y":136.9521}, {"x":2.2948,"y":136.9525}, {"x":2.2938,"y":136.9527},
+                {"x":2.2933,"y":136.9528}, {"x":2.2921,"y":136.9529}, {"x":2.2898,"y":136.9533}, {"x":2.2888,"y":136.9536},
+                {"x":2.2862,"y":136.9542}, {"x":2.283,"y":136.9547}, {"x":2.2796,"y":136.9553}, {"x":2.2769,"y":136.9558},
+                {"x":2.2742,"y":136.9562}, {"x":2.2721,"y":136.9566}, {"x":2.271,"y":136.9567}, {"x":2.2699,"y":136.957},
+                {"x":2.2687,"y":136.9575}, {"x":2.2676,"y":136.9582}, {"x":2.266,"y":136.9592}, {"x":2.2647,"y":136.9604},
+                {"x":2.2628,"y":136.9619}, {"x":2.2603,"y":136.9638}, {"x":2.2569,"y":136.9669}, {"x":2.2539,"y":136.9705},
+                {"x":2.2519,"y":136.9744}, {"x":2.2505,"y":136.979}, {"x":2.2503,"y":136.9846}, {"x":2.2507,"y":136.9912},
+                {"x":2.251,"y":136.9983}, {"x":2.2522,"y":137.0062}, {"x":2.2541,"y":137.0152}, {"x":2.2561,"y":137.0252},
+                {"x":2.2573,"y":137.0351}, {"x":2.2582,"y":137.0456}, {"x":2.2588,"y":137.0566}, {"x":2.2603,"y":137.068},
+                {"x":2.2625,"y":137.0805}, {"x":2.265,"y":137.0934}, {"x":2.2677,"y":137.1062}, {"x":2.2696,"y":137.1165},
+                {"x":2.271,"y":137.1245}, {"x":2.2729,"y":137.131}, {"x":2.2755,"y":137.1373}, {"x":2.2783,"y":137.1444},
+                {"x":2.2807,"y":137.151}, {"x":2.2829,"y":137.1582}, {"x":2.2851,"y":137.1654}, {"x":2.2872,"y":137.1721},
+                {"x":2.2887,"y":137.1772}, {"x":2.2905,"y":137.1812}, {"x":2.2918,"y":137.1834}, {"x":2.2933,"y":137.1843},
+                {"x":2.2948,"y":137.1842}, {"x":2.2955,"y":137.1842}, {"x":2.2961,"y":137.1847}, {"x":2.297,"y":137.1866},
+                {"x":2.2988,"y":137.1909}, {"x":2.3013,"y":137.1973}, {"x":2.3031,"y":137.2045}, {"x":2.3045,"y":137.2119},
+                {"x":2.3054,"y":137.219}, {"x":2.3069,"y":137.2272}, {"x":2.3083,"y":137.2366}, {"x":2.3093,"y":137.2464},
+                {"x":2.3104,"y":137.2562}, {"x":2.3115,"y":137.266}, {"x":2.3122,"y":137.2752}, {"x":2.3134,"y":137.2835},
+                {"x":2.3142,"y":137.2902}, {"x":2.3151,"y":137.2961}, {"x":2.3158,"y":137.3006}, {"x":2.3168,"y":137.3044},
+                {"x":2.3175,"y":137.3073}, {"x":2.3185,"y":137.3094}, {"x":2.3188,"y":137.3113}, {"x":2.3193,"y":137.3121},
+                {"x":2.3204,"y":137.3134}, {"x":2.321,"y":137.3148}, {"x":2.3209,"y":137.3157}, {"x":2.3197,"y":137.316},
+                {"x":2.3187,"y":137.317}, {"x":2.3179,"y":137.3182}, {"x":2.3174,"y":137.3195}, {"x":2.3173,"y":137.321},
+                {"x":2.3178,"y":137.3235}, {"x":2.3182,"y":137.3268}, {"x":2.3184,"y":137.3301}, {"x":2.3179,"y":137.3333},
+                {"x":2.3171,"y":137.3364}, {"x":2.3162,"y":137.34}, {"x":2.3149,"y":137.3439}, {"x":2.3122,"y":137.3467},
+                {"x":2.3087,"y":137.3482}, {"x":2.3052,"y":137.349}, {"x":2.3015,"y":137.3498}, {"x":2.2989,"y":137.3503},
+                {"x":2.2965,"y":137.3508}, {"x":2.2948,"y":137.3512}, {"x":2.2938,"y":137.3514}, {"x":2.2933,"y":137.3515},
+                {"x":2.2921,"y":137.3516}, {"x":2.2898,"y":137.3519}, {"x":2.2888,"y":137.3524}, {"x":2.2862,"y":137.3529},
+                {"x":2.283,"y":137.3533}, {"x":2.2796,"y":137.3536}, {"x":2.2769,"y":137.3541}, {"x":2.2742,"y":137.3546},
+                {"x":2.2721,"y":137.3551}, {"x":2.271,"y":137.3555}, {"x":2.2699,"y":137.3559}, {"x":2.2687,"y":137.3564},
+                {"x":2.2676,"y":137.3572}, {"x":2.266,"y":137.3582}, {"x":2.2647,"y":137.3596}, {"x":2.2628,"y":137.3614},
+                {"x":2.2603,"y":137.3638}, {"x":2.2569,"y":137.3678}, {"x":2.2539,"y":137.3725}, {"x":2.2519,"y":137.3774},
+                {"x":2.2505,"y":137.3827}, {"x":2.2503,"y":137.389}, {"x":2.2507,"y":137.3965}, {"x":2.251,"y":137.404},
+                {"x":2.2522,"y":137.4121}, {"x":2.2541,"y":137.4208}, {"x":2.2561,"y":137.4304}, {"x":2.2573,"y":137.4402},
+                {"x":2.2582,"y":137.4491}, {"x":2.2588,"y":137.4583}, {"x":2.2603,"y":137.4682}, {"x":2.2625,"y":137.4788},
+                {"x":2.265,"y":137.4891}, {"x":2.2677,"y":137.4996}, {"x":2.2696,"y":137.509}, {"x":2.271,"y":137.5165},
+                {"x":2.2729,"y":137.5235}, {"x":2.2755,"y":137.5303}, {"x":2.2783,"y":137.537}, {"x":2.2807,"y":137.5441},
+                {"x":2.2829,"y":137.551}, {"x":2.2851,"y":137.5583}, {"x":2.2872,"y":137.5654}, {"x":2.2887,"y":137.5714},
+                {"x":2.2905,"y":137.5759}, {"x":2.2918,"y":137.5786}, {"x":2.2933,"y":137.5802}, {"x":2.2948,"y":137.5808},
+                {"x":2.2955,"y":137.5815}, {"x":2.2961,"y":137.5833}, {"x":2.297,"y":137.5869}, {"x":2.2988,"y":137.5931},
+                {"x":2.3013,"y":137.601}, {"x":2.3031,"y":137.61}, {"x":2.3045,"y":137.6186}, {"x":2.3054,"y":137.6268},
+                {"x":2.3069,"y":137.6366}, {"x":2.3083,"y":137.6475}, {"x":2.3093,"y":137.6582}, {"x":2.3104,"y":137.6687},
+                {"x":2.3115,"y":137.6793}, {"x":2.3122,"y":137.6896}, {"x":2.3134,"y":137.6996}, {"x":2.3142,"y":137.7082},
+                {"x":2.3151,"y":137.7156}, {"x":2.3158,"y":137.7219}, {"x":2.3168,"y":137.7265}, {"x":2.3175,"y":137.7303},
+                {"x":2.3185,"y":137.7329}, {"x":2.3188,"y":137.7346}, {"x":2.3193,"y":137.7356}, {"x":2.3204,"y":137.7369},
+                {"x":2.321,"y":137.7381}, {"x":2.3209,"y":137.7388}, {"x":2.3197,"y":137.7389}, {"x":2.3187,"y":137.7394},
+                {"x":2.3179,"y":137.7402}, {"x":2.3174,"y":137.7413}, {"x":2.3173,"y":137.7426}, {"x":2.3178,"y":137.7451},
+                {"x":2.3182,"y":137.7483}, {"x":2.3184,"y":137.7517}, {"x":2.3179,"y":137.7551}, {"x":2.3171,"y":137.7583},
+                {"x":2.3162,"y":137.7617}, {"x":2.3149,"y":137.7656}, {"x":2.3122,"y":137.7684}, {"x":2.3087,"y":137.7702},
+                {"x":2.3052,"y":137.7711}, {"x":2.3015,"y":137.772}, {"x":2.2989,"y":137.7726}, {"x":2.2965,"y":137.7733},
+                {"x":2.2948,"y":137.7738}, {"x":2.2938,"y":137.774}, {"x":2.2933,"y":137.774}, {"x":2.2921,"y":137.774},
+                {"x":2.2898,"y":137.7745}, {"x":2.2888,"y":137.7751}, {"x":2.2862,"y":137.7761}, {"x":2.283,"y":137.7772},
+                {"x":2.2796,"y":137.778}, {"x":2.2769,"y":137.7788}, {"x":2.2742,"y":137.7797}, {"x":2.2721,"y":137.7806},
+                {"x":2.271,"y":137.7816}, {"x":2.2699,"y":137.7828}, {"x":2.2687,"y":137.784}, {"x":2.2676,"y":137.7858},
+                {"x":2.266,"y":137.7879}, {"x":2.2647,"y":137.7905}, {"x":2.2628,"y":137.7937}, {"x":2.2603,"y":137.7977},
+                {"x":2.2569,"y":137.8037}, {"x":2.2539,"y":137.8105}, {"x":2.2519,"y":137.8178}, {"x":2.2505,"y":137.8256},
+                {"x":2.2503,"y":137.8344}, {"x":2.2507,"y":137.8437}, {"x":2.251,"y":137.8529}, {"x":2.2522,"y":137.8624},
+                {"x":2.2541,"y":137.8722}, {"x":2.2561,"y":137.8821}, {"x":2.2573,"y":137.8916}, {"x":2.2582,"y":137.9002},
+                {"x":2.2588,"y":137.909}, {"x":2.2603,"y":137.919}, {"x":2.2625,"y":137.9304}, {"x":2.265,"y":137.9421},
+                {"x":2.2677,"y":137.9546}, {"x":2.2696,"y":137.9657}, {"x":2.271,"y":137.9739}, {"x":2.2729,"y":137.9813},
+                {"x":2.2755,"y":137.9882}, {"x":2.2783,"y":137.9947}, {"x":2.2807,"y":138.0016}, {"x":2.2829,"y":138.0084},
+                {"x":2.2851,"y":138.0151}, {"x":2.2872,"y":138.0213}, {"x":2.2887,"y":138.0261}, {"x":2.2905,"y":138.0302},
+                {"x":2.2918,"y":138.0322}, {"x":2.2933,"y":138.0328}, {"x":2.2948,"y":138.0332}, {"x":2.2955,"y":138.0337},
+                {"x":2.2961,"y":138.0351}, {"x":2.297,"y":138.0381}, {"x":2.2988,"y":138.0435}, {"x":2.3013,"y":138.0515},
+                {"x":2.3031,"y":138.0601}, {"x":2.3045,"y":138.0682}, {"x":2.3054,"y":138.0759}, {"x":2.3069,"y":138.0849},
+                {"x":2.3083,"y":138.095}, {"x":2.3093,"y":138.1054}, {"x":2.3104,"y":138.1165}, {"x":2.3115,"y":138.1275},
+                {"x":2.3122,"y":138.1377}, {"x":2.3134,"y":138.1472}, {"x":2.3142,"y":138.1557}, {"x":2.3151,"y":138.1633},
+                {"x":2.3158,"y":138.1695}, {"x":2.3168,"y":138.1746}, {"x":2.3175,"y":138.1783}, {"x":2.3185,"y":138.1813},
+                {"x":2.3188,"y":138.184}, {"x":2.3193,"y":138.1856}, {"x":2.3204,"y":138.1884}, {"x":2.321,"y":138.1918},
+                {"x":2.3209,"y":138.1943}, {"x":2.3197,"y":138.1959}, {"x":2.3187,"y":138.1973}, {"x":2.3179,"y":138.1991},
+                {"x":2.3174,"y":138.2009}, {"x":2.3173,"y":138.2029}, {"x":2.3178,"y":138.2064}, {"x":2.3182,"y":138.2104},
+                {"x":2.3184,"y":138.2148}, {"x":2.3179,"y":138.2193}, {"x":2.3171,"y":138.2234}, {"x":2.3162,"y":138.2274},
+                {"x":2.3149,"y":138.2319}, {"x":2.3122,"y":138.2348}, {"x":2.3087,"y":138.2366}, {"x":2.3052,"y":138.2374},
+                {"x":2.3015,"y":138.238}, {"x":2.2989,"y":138.2384}, {"x":2.2965,"y":138.2393}, {"x":2.2948,"y":138.2398},
+                {"x":2.2938,"y":138.24}, {"x":2.2933,"y":138.2401}, {"x":2.2921,"y":138.2403}, {"x":2.2898,"y":138.2409},
+                {"x":2.2888,"y":138.2415}, {"x":2.2862,"y":138.2427}, {"x":2.283,"y":138.244}, {"x":2.2796,"y":138.2452},
+                {"x":2.2769,"y":138.246}, {"x":2.2742,"y":138.2467}, {"x":2.2721,"y":138.2471}, {"x":2.271,"y":138.2472},
+                {"x":2.2699,"y":138.2474}, {"x":2.2687,"y":138.2479}, {"x":2.2676,"y":138.2486}, {"x":2.266,"y":138.2497},
+                {"x":2.2647,"y":138.2513}, {"x":2.2628,"y":138.2533}, {"x":2.2603,"y":138.2558}, {"x":2.2569,"y":138.2599},
+                {"x":2.2539,"y":138.2649}, {"x":2.2519,"y":138.2704}, {"x":2.2505,"y":138.2764}, {"x":2.2503,"y":138.2835},
+                {"x":2.2507,"y":138.2917}, {"x":2.251,"y":138.3005}, {"x":2.2522,"y":138.3102}, {"x":2.2541,"y":138.3204},
+                {"x":2.2561,"y":138.331}, {"x":2.2573,"y":138.3413}, {"x":2.2582,"y":138.3512}, {"x":2.2588,"y":138.3614},
+                {"x":2.2603,"y":138.3719}, {"x":2.2625,"y":138.3826}, {"x":2.265,"y":138.3934}, {"x":2.2677,"y":138.4042},
+                {"x":2.2696,"y":138.4128}, {"x":2.271,"y":138.4194}, {"x":2.2729,"y":138.4251}, {"x":2.2755,"y":138.4311},
+                {"x":2.2783,"y":138.438}, {"x":2.2807,"y":138.445}, {"x":2.2829,"y":138.452}, {"x":2.2851,"y":138.4593},
+                {"x":2.2872,"y":138.4665}, {"x":2.2887,"y":138.4728}, {"x":2.2905,"y":138.4776}, {"x":2.2918,"y":138.4802},
+                {"x":2.2933,"y":138.4812}, {"x":2.2948,"y":138.4812}, {"x":2.2955,"y":138.4817}, {"x":2.2961,"y":138.4831},
+                {"x":2.297,"y":138.4861}, {"x":2.2988,"y":138.4912}, {"x":2.3013,"y":138.4981}, {"x":2.3031,"y":138.5052},
+                {"x":2.3045,"y":138.5132}, {"x":2.3054,"y":138.521}, {"x":2.3069,"y":138.5303}, {"x":2.3083,"y":138.5401},
+                {"x":2.3093,"y":138.5501}, {"x":2.3104,"y":138.5606}, {"x":2.3115,"y":138.571}, {"x":2.3122,"y":138.5807},
+                {"x":2.3134,"y":138.5892}, {"x":2.3142,"y":138.5962}, {"x":2.3151,"y":138.6025}, {"x":2.3158,"y":138.6074},
+                {"x":2.3168,"y":138.6111}, {"x":2.3175,"y":138.6136}, {"x":2.3185,"y":138.6152}, {"x":2.3188,"y":138.6163},
+                {"x":2.3193,"y":138.6169}, {"x":2.3204,"y":138.6181}, {"x":2.321,"y":138.6192}, {"x":2.3209,"y":138.6196},
+                {"x":2.3197,"y":138.6197}, {"x":2.3187,"y":138.6199}, {"x":2.3179,"y":138.6202}, {"x":2.3174,"y":138.6209},
+                {"x":2.3173,"y":138.6221}, {"x":2.3178,"y":138.6241}, {"x":2.3182,"y":138.6264}, {"x":2.3184,"y":138.6288},
+                {"x":2.3179,"y":138.6312}, {"x":2.3171,"y":138.6335}, {"x":2.3162,"y":138.6362}, {"x":2.3149,"y":138.6391},
+                {"x":2.3122,"y":138.6415}, {"x":2.3087,"y":138.6425}, {"x":2.3052,"y":138.6428}, {"x":2.3015,"y":138.6433},
+                {"x":2.2989,"y":138.6437}, {"x":2.2965,"y":138.644}, {"x":2.2948,"y":138.6441}, {"x":2.2938,"y":138.6441},
+                {"x":2.2933,"y":138.6441}, {"x":2.2921,"y":138.6442}, {"x":2.2898,"y":138.6446}, {"x":2.2888,"y":138.645},
+                {"x":2.2862,"y":138.6458}, {"x":2.283,"y":138.6464}, {"x":2.2796,"y":138.647}, {"x":2.2769,"y":138.6475},
+                {"x":2.2742,"y":138.6481}, {"x":2.2721,"y":138.6486}, {"x":2.271,"y":138.6493}, {"x":2.2699,"y":138.6501},
+                {"x":2.2687,"y":138.651}, {"x":2.2676,"y":138.6521}, {"x":2.266,"y":138.6534}, {"x":2.2647,"y":138.655},
+                {"x":2.2628,"y":138.6571}, {"x":2.2603,"y":138.6596}, {"x":2.2569,"y":138.6639}, {"x":2.2539,"y":138.6687},
+                {"x":2.2519,"y":138.6739}, {"x":2.2505,"y":138.68}, {"x":2.2503,"y":138.6872}, {"x":2.2507,"y":138.6953},
+                {"x":2.251,"y":138.704}, {"x":2.2522,"y":138.7136}, {"x":2.2541,"y":138.724}, {"x":2.2561,"y":138.7346},
+                {"x":2.2573,"y":138.7441}, {"x":2.2582,"y":138.7533}, {"x":2.2588,"y":138.7624}, {"x":2.2603,"y":138.772},
+                {"x":2.2625,"y":138.7825}, {"x":2.265,"y":138.7932}, {"x":2.2677,"y":138.804}, {"x":2.2696,"y":138.8122},
+                {"x":2.271,"y":138.8183}, {"x":2.2729,"y":138.8241}, {"x":2.2755,"y":138.83}, {"x":2.2783,"y":138.8364},
+                {"x":2.2807,"y":138.843}, {"x":2.2829,"y":138.8504}, {"x":2.2851,"y":138.858}, {"x":2.2872,"y":138.8654},
+                {"x":2.2887,"y":138.8719}, {"x":2.2905,"y":138.8767}, {"x":2.2918,"y":138.8791}, {"x":2.2933,"y":138.8804},
+                {"x":2.2948,"y":138.8805}, {"x":2.2955,"y":138.8807}, {"x":2.2961,"y":138.8817}, {"x":2.297,"y":138.885},
+                {"x":2.2988,"y":138.8906}, {"x":2.3013,"y":138.8973}, {"x":2.3031,"y":138.9054}, {"x":2.3045,"y":138.9135},
+                {"x":2.3054,"y":138.9213}, {"x":2.3069,"y":138.9302}, {"x":2.3083,"y":138.9401}, {"x":2.3093,"y":138.9501},
+                {"x":2.3104,"y":138.9602}, {"x":2.3115,"y":138.9701}, {"x":2.3122,"y":138.9793}, {"x":2.3134,"y":138.9877},
+                {"x":2.3142,"y":138.9947}, {"x":2.3151,"y":139.0016}, {"x":2.3158,"y":139.0069}, {"x":2.3168,"y":139.0113},
+                {"x":2.3175,"y":139.014}, {"x":2.3185,"y":139.016}, {"x":2.3188,"y":139.0169}, {"x":2.3193,"y":139.0177},
+                {"x":2.3204,"y":139.0189}, {"x":2.321,"y":139.0201}, {"x":2.3209,"y":139.0204}, {"x":2.3197,"y":139.0206},
+                {"x":2.3187,"y":139.0209}, {"x":2.3179,"y":139.0213}, {"x":2.3174,"y":139.0219}, {"x":2.3173,"y":139.0229},
+                {"x":2.3178,"y":139.0248}, {"x":2.3182,"y":139.0271}, {"x":2.3184,"y":139.0294}, {"x":2.3179,"y":139.0315},
+                {"x":2.3171,"y":139.0334}, {"x":2.3162,"y":139.0357}, {"x":2.3149,"y":139.0384}, {"x":2.3122,"y":139.0401},
+                {"x":2.3087,"y":139.041}, {"x":2.3052,"y":139.0416}, {"x":2.3015,"y":139.042}, {"x":2.2989,"y":139.0423},
+                {"x":2.2965,"y":139.0426}, {"x":2.2948,"y":139.0427}, {"x":2.2938,"y":139.0427}, {"x":2.2933,"y":139.0427},
+                {"x":2.2921,"y":139.0428}, {"x":2.2898,"y":139.0431}, {"x":2.2888,"y":139.0436}, {"x":2.2862,"y":139.0443},
+                {"x":2.283,"y":139.045}, {"x":2.2796,"y":139.0456}, {"x":2.2769,"y":139.046}, {"x":2.2742,"y":139.0463},
+                {"x":2.2721,"y":139.0465}, {"x":2.271,"y":139.0467}, {"x":2.2699,"y":139.047}, {"x":2.2687,"y":139.0475},
+                {"x":2.2676,"y":139.0482}, {"x":2.266,"y":139.0494}, {"x":2.2647,"y":139.0509}, {"x":2.2628,"y":139.0528},
+                {"x":2.2603,"y":139.0553}, {"x":2.2569,"y":139.0594}, {"x":2.2539,"y":139.0641}, {"x":2.2519,"y":139.0694},
+                {"x":2.2505,"y":139.0754}, {"x":2.2503,"y":139.0827}, {"x":2.2507,"y":139.0911}, {"x":2.251,"y":139.1001},
+                {"x":2.2522,"y":139.1098}, {"x":2.2541,"y":139.1205}, {"x":2.2561,"y":139.1315}, {"x":2.2573,"y":139.1417},
+                {"x":2.2582,"y":139.1513}, {"x":2.2588,"y":139.1611}, {"x":2.2603,"y":139.1717}, {"x":2.2625,"y":139.1827},
+                {"x":2.265,"y":139.1939}, {"x":2.2677,"y":139.2053}, {"x":2.2696,"y":139.2152}, {"x":2.271,"y":139.2227},
+                {"x":2.2729,"y":139.2292}, {"x":2.2755,"y":139.2351}, {"x":2.2783,"y":139.2415}, {"x":2.2807,"y":139.248},
+                {"x":2.2829,"y":139.2547}, {"x":2.2851,"y":139.2618}, {"x":2.2872,"y":139.269}, {"x":2.2887,"y":139.2756},
+                {"x":2.2905,"y":139.2808}, {"x":2.2918,"y":139.2838}, {"x":2.2933,"y":139.2856}, {"x":2.2948,"y":139.2868},
+                {"x":2.2955,"y":139.2874}, {"x":2.2961,"y":139.2886}, {"x":2.297,"y":139.2913}, {"x":2.2988,"y":139.296},
+                {"x":2.3013,"y":139.3025}, {"x":2.3031,"y":139.3101}, {"x":2.3045,"y":139.3178}, {"x":2.3054,"y":139.3251},
+                {"x":2.3069,"y":139.3333}, {"x":2.3083,"y":139.3421}, {"x":2.3093,"y":139.3508}, {"x":2.3104,"y":139.3601},
+                {"x":2.3115,"y":139.3695}, {"x":2.3122,"y":139.3783}, {"x":2.3134,"y":139.3855}, {"x":2.3142,"y":139.3921},
+                {"x":2.3151,"y":139.398}, {"x":2.3158,"y":139.4025}, {"x":2.3168,"y":139.4061}, {"x":2.3175,"y":139.409},
+                {"x":2.3185,"y":139.4109}, {"x":2.3188,"y":139.4121}, {"x":2.3193,"y":139.4128}, {"x":2.3204,"y":139.4143},
+                {"x":2.321,"y":139.4162}, {"x":2.3209,"y":139.4172}, {"x":2.3197,"y":139.4177}, {"x":2.3187,"y":139.4184},
+                {"x":2.3179,"y":139.4194}, {"x":2.3174,"y":139.4207}, {"x":2.3173,"y":139.4222}, {"x":2.3178,"y":139.4246},
+                {"x":2.3182,"y":139.4276}, {"x":2.3184,"y":139.4307}, {"x":2.3179,"y":139.4338}, {"x":2.3171,"y":139.4363},
+                {"x":2.3162,"y":139.4393}, {"x":2.3149,"y":139.4426}, {"x":2.3122,"y":139.4452}, {"x":2.3087,"y":139.4468},
+                {"x":2.3052,"y":139.4475}, {"x":2.3015,"y":139.4481}, {"x":2.2989,"y":139.4485}, {"x":2.2965,"y":139.4491},
+                {"x":2.2948,"y":139.4495}, {"x":2.2938,"y":139.4497}, {"x":2.2933,"y":139.4498}, {"x":2.2921,"y":139.4499},
+                {"x":2.2898,"y":139.4503}, {"x":2.2888,"y":139.4507}, {"x":2.2862,"y":139.4514}, {"x":2.283,"y":139.452},
+                {"x":2.2796,"y":139.4526}, {"x":2.2769,"y":139.4533}, {"x":2.2742,"y":139.454}, {"x":2.2721,"y":139.4547},
+                {"x":2.271,"y":139.4552}, {"x":2.2699,"y":139.4561}, {"x":2.2687,"y":139.4571}, {"x":2.2676,"y":139.4582},
+                {"x":2.266,"y":139.4598}, {"x":2.2647,"y":139.4619}, {"x":2.2628,"y":139.4646}, {"x":2.2603,"y":139.4679},
+                {"x":2.2569,"y":139.4728}, {"x":2.2539,"y":139.4787}, {"x":2.2519,"y":139.4849}, {"x":2.2505,"y":139.4916},
+                {"x":2.2503,"y":139.4991}, {"x":2.2507,"y":139.5074}, {"x":2.251,"y":139.5164}, {"x":2.2522,"y":139.5262},
+                {"x":2.2541,"y":139.5363}, {"x":2.2561,"y":139.5469}, {"x":2.2573,"y":139.5566}, {"x":2.2582,"y":139.5663},
+                {"x":2.2588,"y":139.5762}, {"x":2.2603,"y":139.5872}, {"x":2.2625,"y":139.5989}, {"x":2.265,"y":139.6109},
+                {"x":2.2677,"y":139.6229}, {"x":2.2696,"y":139.6331}, {"x":2.271,"y":139.6416}, {"x":2.2729,"y":139.6488},
+                {"x":2.2755,"y":139.6558}, {"x":2.2783,"y":139.6631}, {"x":2.2807,"y":139.6706}, {"x":2.2829,"y":139.6781},
+                {"x":2.2851,"y":139.686}, {"x":2.2872,"y":139.6942}, {"x":2.2887,"y":139.7006}, {"x":2.2905,"y":139.7051},
+                {"x":2.2918,"y":139.7077}, {"x":2.2933,"y":139.7088}, {"x":2.2948,"y":139.7092}, {"x":2.2955,"y":139.7095},
+                {"x":2.2961,"y":139.7111}, {"x":2.297,"y":139.7144}, {"x":2.2988,"y":139.721}, {"x":2.3013,"y":139.7299},
+                {"x":2.3031,"y":139.7397}, {"x":2.3045,"y":139.7505}, {"x":2.3054,"y":139.761}, {"x":2.3069,"y":139.7731},
+                {"x":2.3083,"y":139.7865}, {"x":2.3093,"y":139.8005}, {"x":2.3104,"y":139.8149}, {"x":2.3115,"y":139.8291},
+                {"x":2.3122,"y":139.8427}, {"x":2.3134,"y":139.8554}, {"x":2.3142,"y":139.8665}, {"x":2.3151,"y":139.8774},
+                {"x":2.3158,"y":139.8864}, {"x":2.3168,"y":139.8932}, {"x":2.3175,"y":139.8986}, {"x":2.3185,"y":139.9031},
+                {"x":2.3188,"y":139.9061}, {"x":2.3193,"y":139.9084}, {"x":2.3204,"y":139.9116}, {"x":2.321,"y":139.9152},
+                {"x":2.3209,"y":139.918}, {"x":2.3197,"y":139.9198}, {"x":2.3187,"y":139.9213}, {"x":2.3179,"y":139.9234},
+                {"x":2.3174,"y":139.9258}, {"x":2.3173,"y":139.9284}, {"x":2.3178,"y":139.9324}, {"x":2.3182,"y":139.9369},
+                {"x":2.3184,"y":139.9416}, {"x":2.3179,"y":139.946}, {"x":2.3171,"y":139.9501}, {"x":2.3162,"y":139.9546},
+                {"x":2.3149,"y":139.9598}, {"x":2.3122,"y":139.9638}, {"x":2.3087,"y":139.9664}, {"x":2.3052,"y":139.9676},
+                {"x":2.3015,"y":139.9687}, {"x":2.2989,"y":139.9694}, {"x":2.2965,"y":139.9701}, {"x":2.2948,"y":139.9705},
+                {"x":2.2938,"y":139.9707}, {"x":2.2933,"y":139.9708}, {"x":2.2921,"y":139.971}, {"x":2.2898,"y":139.9716},
+                {"x":2.2888,"y":139.9721}, {"x":2.2862,"y":139.9728}, {"x":2.283,"y":139.9734}, {"x":2.2796,"y":139.974},
+                {"x":2.2769,"y":139.9745}, {"x":2.2742,"y":139.9749}, {"x":2.2721,"y":139.9752}, {"x":2.271,"y":139.9754},
+                {"x":2.2699,"y":139.9757}, {"x":2.2687,"y":139.9763}, {"x":2.2676,"y":139.9772}, {"x":2.266,"y":139.9785},
+                {"x":2.2647,"y":139.9804}, {"x":2.2628,"y":139.9829}, {"x":2.2603,"y":139.9858}, {"x":2.2569,"y":139.9904},
+                {"x":2.2539,"y":139.9958}, {"x":2.2519,"y":140.0019}, {"x":2.2505,"y":140.0084}, {"x":2.2503,"y":140.0157},
+                {"x":2.2507,"y":140.024}, {"x":2.251,"y":140.0326}, {"x":2.2522,"y":140.0416}, {"x":2.2541,"y":140.051},
+                {"x":2.2561,"y":140.0611}, {"x":2.2573,"y":140.071}, {"x":2.2582,"y":140.0805}, {"x":2.2588,"y":140.0898},
+                {"x":2.2603,"y":140.1005}, {"x":2.2625,"y":140.1118}, {"x":2.265,"y":140.1232}, {"x":2.2677,"y":140.1345},
+                {"x":2.2696,"y":140.1436}, {"x":2.271,"y":140.1506}, {"x":2.2729,"y":140.1566}, {"x":2.2755,"y":140.1627},
+                {"x":2.2783,"y":140.1691}, {"x":2.2807,"y":140.176}, {"x":2.2829,"y":140.1831}, {"x":2.2851,"y":140.1906},
+                {"x":2.2872,"y":140.1983}, {"x":2.2887,"y":140.2052}, {"x":2.2905,"y":140.2104}, {"x":2.2918,"y":140.2132},
+                {"x":2.2933,"y":140.2148}, {"x":2.2948,"y":140.2155}, {"x":2.2955,"y":140.2163}, {"x":2.2961,"y":140.218},
+                {"x":2.297,"y":140.2215}, {"x":2.2988,"y":140.2281}, {"x":2.3013,"y":140.237}, {"x":2.3031,"y":140.2467},
+                {"x":2.3045,"y":140.2568}, {"x":2.3054,"y":140.267}, {"x":2.3069,"y":140.2788}, {"x":2.3083,"y":140.2918},
+                {"x":2.3093,"y":140.3052}, {"x":2.3104,"y":140.3188}, {"x":2.3115,"y":140.332}, {"x":2.3122,"y":140.3444},
+                {"x":2.3134,"y":140.3557}, {"x":2.3142,"y":140.3659}, {"x":2.3151,"y":140.3752}, {"x":2.3158,"y":140.3828},
+                {"x":2.3168,"y":140.3888}, {"x":2.3175,"y":140.3934}, {"x":2.3185,"y":140.3965}, {"x":2.3188,"y":140.3986},
+                {"x":2.3193,"y":140.4001}, {"x":2.3204,"y":140.4025}, {"x":2.321,"y":140.4054}, {"x":2.3209,"y":140.4074},
+                {"x":2.3197,"y":140.4089}, {"x":2.3187,"y":140.4107}, {"x":2.3179,"y":140.4128}, {"x":2.3174,"y":140.4154},
+                {"x":2.3173,"y":140.4182}, {"x":2.3178,"y":140.4221}, {"x":2.3182,"y":140.4269}, {"x":2.3184,"y":140.432},
+                {"x":2.3179,"y":140.4373}, {"x":2.3171,"y":140.4427}, {"x":2.3162,"y":140.4485}, {"x":2.3149,"y":140.4552},
+                {"x":2.3122,"y":140.4611}, {"x":2.3087,"y":140.4646}, {"x":2.3052,"y":140.4665}, {"x":2.3015,"y":140.4678},
+                {"x":2.2989,"y":140.4687}, {"x":2.2965,"y":140.4697}, {"x":2.2948,"y":140.4704}, {"x":2.2938,"y":140.4708},
+                {"x":2.2933,"y":140.471}, {"x":2.2921,"y":140.4711}, {"x":2.2898,"y":140.4718}, {"x":2.2888,"y":140.4725},
+                {"x":2.2862,"y":140.4735}, {"x":2.283,"y":140.4746}, {"x":2.2796,"y":140.4755}, {"x":2.2769,"y":140.4764},
+                {"x":2.2742,"y":140.4772}, {"x":2.2721,"y":140.478}, {"x":2.271,"y":140.4789}, {"x":2.2699,"y":140.4801},
+                {"x":2.2687,"y":140.4813}, {"x":2.2676,"y":140.4828}, {"x":2.266,"y":140.4849}, {"x":2.2647,"y":140.4877},
+                {"x":2.2628,"y":140.4908}, {"x":2.2603,"y":140.4947}, {"x":2.2569,"y":140.501}, {"x":2.2539,"y":140.508},
+                {"x":2.2519,"y":140.5153}, {"x":2.2505,"y":140.5233}, {"x":2.2503,"y":140.5318}, {"x":2.2507,"y":140.5408},
+                {"x":2.251,"y":140.5504}, {"x":2.2522,"y":140.5606}, {"x":2.2541,"y":140.5714}, {"x":2.2561,"y":140.5824},
+                {"x":2.2573,"y":140.5925}, {"x":2.2582,"y":140.602}, {"x":2.2588,"y":140.6111}, {"x":2.2603,"y":140.6209},
+                {"x":2.2625,"y":140.6322}, {"x":2.265,"y":140.6439}, {"x":2.2677,"y":140.6558}, {"x":2.2696,"y":140.6653},
+                {"x":2.271,"y":140.6725}, {"x":2.2729,"y":140.6789}, {"x":2.2755,"y":140.6853}, {"x":2.2783,"y":140.6917},
+                {"x":2.2807,"y":140.6983}, {"x":2.2829,"y":140.705}, {"x":2.2851,"y":140.7121}, {"x":2.2872,"y":140.7189},
+                {"x":2.2887,"y":140.7247}, {"x":2.2905,"y":140.7289}, {"x":2.2918,"y":140.7309}, {"x":2.2933,"y":140.7317},
+                {"x":2.2948,"y":140.732}, {"x":2.2955,"y":140.7323}, {"x":2.2961,"y":140.7335}, {"x":2.297,"y":140.7358},
+                {"x":2.2988,"y":140.7402}, {"x":2.3013,"y":140.7466}, {"x":2.3031,"y":140.7533}, {"x":2.3045,"y":140.7601},
+                {"x":2.3054,"y":140.7663}, {"x":2.3069,"y":140.7731}, {"x":2.3083,"y":140.7807}, {"x":2.3093,"y":140.7885},
+                {"x":2.3104,"y":140.7961}, {"x":2.3115,"y":140.8037}, {"x":2.3122,"y":140.8105}, {"x":2.3134,"y":140.8166},
+                {"x":2.3142,"y":140.8222}, {"x":2.3151,"y":140.827}, {"x":2.3158,"y":140.831}, {"x":2.3168,"y":140.8341},
+                {"x":2.3175,"y":140.836}, {"x":2.3185,"y":140.8373}, {"x":2.3188,"y":140.838}, {"x":2.3193,"y":140.8384},
+                {"x":2.3204,"y":140.8398}, {"x":2.321,"y":140.8413}, {"x":2.3209,"y":140.8422}, {"x":2.3197,"y":140.8427},
+                {"x":2.3187,"y":140.8433}, {"x":2.3179,"y":140.8443}, {"x":2.3174,"y":140.8455}, {"x":2.3173,"y":140.8471},
+                {"x":2.3178,"y":140.8494}, {"x":2.3182,"y":140.8524}, {"x":2.3184,"y":140.8554}, {"x":2.3179,"y":140.8584},
+                {"x":2.3171,"y":140.8611}, {"x":2.3162,"y":140.864}, {"x":2.3149,"y":140.8672}, {"x":2.3122,"y":140.8698},
+                {"x":2.3087,"y":140.8715}, {"x":2.3052,"y":140.8722}, {"x":2.3015,"y":140.8729}, {"x":2.2989,"y":140.8732},
+                {"x":2.2965,"y":140.8735}, {"x":2.2948,"y":140.8737}, {"x":2.2938,"y":140.8738}, {"x":2.2933,"y":140.8738},
+                {"x":2.2921,"y":140.8739}, {"x":2.2898,"y":140.8741}, {"x":2.2888,"y":140.8743}, {"x":2.2862,"y":140.8747},
+                {"x":2.283,"y":140.8752}, {"x":2.2796,"y":140.8756}, {"x":2.2769,"y":140.8761}, {"x":2.2742,"y":140.8764},
+                {"x":2.2721,"y":140.8767}, {"x":2.271,"y":140.8771}, {"x":2.2699,"y":140.8775}, {"x":2.2687,"y":140.8781},
+                {"x":2.2676,"y":140.879}, {"x":2.266,"y":140.8802}, {"x":2.2647,"y":140.8817}, {"x":2.2628,"y":140.8838},
+                {"x":2.2603,"y":140.8863}, {"x":2.2569,"y":140.8906}, {"x":2.2539,"y":140.8957}, {"x":2.2519,"y":140.9015},
+                {"x":2.2505,"y":140.9082}, {"x":2.2503,"y":140.9158}, {"x":2.2507,"y":140.9248}, {"x":2.251,"y":140.9341},
+                {"x":2.2522,"y":140.9436}, {"x":2.2541,"y":140.9535}, {"x":2.2561,"y":140.9634}, {"x":2.2573,"y":140.9729},
+                {"x":2.2582,"y":140.9823}, {"x":2.2588,"y":140.9918}, {"x":2.2603,"y":141.0021}, {"x":2.2625,"y":141.0135},
+                {"x":2.265,"y":141.0254}, {"x":2.2677,"y":141.0374}, {"x":2.2696,"y":141.0471}, {"x":2.271,"y":141.0544},
+                {"x":2.2729,"y":141.0603}, {"x":2.2755,"y":141.0664}, {"x":2.2783,"y":141.073}, {"x":2.2807,"y":141.08},
+                {"x":2.2829,"y":141.0869}, {"x":2.2851,"y":141.0945}, {"x":2.2872,"y":141.1018}, {"x":2.2887,"y":141.1082},
+                {"x":2.2905,"y":141.1128}, {"x":2.2918,"y":141.1154}, {"x":2.2933,"y":141.1165}, {"x":2.2948,"y":141.1168},
+                {"x":2.2955,"y":141.1171}, {"x":2.2961,"y":141.118}, {"x":2.297,"y":141.1206}, {"x":2.2988,"y":141.1256},
+                {"x":2.3013,"y":141.1325}, {"x":2.3031,"y":141.1404}, {"x":2.3045,"y":141.1486}, {"x":2.3054,"y":141.1563},
+                {"x":2.3069,"y":141.1652}, {"x":2.3083,"y":141.1749}, {"x":2.3093,"y":141.1849}, {"x":2.3104,"y":141.1952},
+                {"x":2.3115,"y":141.2053}, {"x":2.3122,"y":141.2148}, {"x":2.3134,"y":141.2234}, {"x":2.3142,"y":141.2312},
+                {"x":2.3151,"y":141.2378}, {"x":2.3158,"y":141.2435}, {"x":2.3168,"y":141.248}, {"x":2.3175,"y":141.2509},
+                {"x":2.3185,"y":141.253}, {"x":2.3188,"y":141.2541}, {"x":2.3193,"y":141.2547}, {"x":2.3204,"y":141.2555},
+                {"x":2.321,"y":141.2563}, {"x":2.3209,"y":141.2568}, {"x":2.3197,"y":141.2571}, {"x":2.3187,"y":141.2575},
+                {"x":2.3179,"y":141.258}, {"x":2.3174,"y":141.2585}, {"x":2.3173,"y":141.2592}, {"x":2.3178,"y":141.2608},
+                {"x":2.3182,"y":141.2628}, {"x":2.3184,"y":141.2649}, {"x":2.3179,"y":141.2673}, {"x":2.3171,"y":141.2699},
+                {"x":2.3162,"y":141.2728}, {"x":2.3149,"y":141.2759}, {"x":2.3122,"y":141.2783}, {"x":2.3087,"y":141.2796},
+                {"x":2.3052,"y":141.2801}, {"x":2.3015,"y":141.2804}, {"x":2.2989,"y":141.2806}, {"x":2.2965,"y":141.2809},
+                {"x":2.2948,"y":141.2811}, {"x":2.2938,"y":141.2812}, {"x":2.2933,"y":141.2813}, {"x":2.2921,"y":141.2814},
+                {"x":2.2898,"y":141.2817}, {"x":2.2888,"y":141.2819}, {"x":2.2862,"y":141.2824}, {"x":2.283,"y":141.2828},
+                {"x":2.2796,"y":141.2832}, {"x":2.2769,"y":141.2836}, {"x":2.2742,"y":141.2839}, {"x":2.2721,"y":141.2842},
+                {"x":2.271,"y":141.2845}, {"x":2.2699,"y":141.285}, {"x":2.2687,"y":141.2858}, {"x":2.2676,"y":141.2867},
+                {"x":2.266,"y":141.2881}, {"x":2.2647,"y":141.2897}, {"x":2.2628,"y":141.2918}, {"x":2.2603,"y":141.2943},
+                {"x":2.2569,"y":141.2985}, {"x":2.2539,"y":141.3031}, {"x":2.2519,"y":141.3087}, {"x":2.2505,"y":141.3151},
+                {"x":2.2503,"y":141.3228}, {"x":2.2507,"y":141.3312}, {"x":2.251,"y":141.3403}, {"x":2.2522,"y":141.3503},
+                {"x":2.2541,"y":141.3608}, {"x":2.2561,"y":141.3718}, {"x":2.2573,"y":141.3821}, {"x":2.2582,"y":141.3916},
+                {"x":2.2588,"y":141.4011}, {"x":2.2603,"y":141.4116}, {"x":2.2625,"y":141.423}, {"x":2.265,"y":141.4344},
+                {"x":2.2677,"y":141.446}, {"x":2.2696,"y":141.4554}, {"x":2.271,"y":141.463}, {"x":2.2729,"y":141.4691},
+                {"x":2.2755,"y":141.4746}, {"x":2.2783,"y":141.4802}, {"x":2.2807,"y":141.4862}, {"x":2.2829,"y":141.4922},
+                {"x":2.2851,"y":141.4984}, {"x":2.2872,"y":141.5047}, {"x":2.2887,"y":141.51}, {"x":2.2905,"y":141.514},
+                {"x":2.2918,"y":141.5161}, {"x":2.2933,"y":141.5173}, {"x":2.2948,"y":141.5178}, {"x":2.2955,"y":141.5182},
+                {"x":2.2961,"y":141.5192}, {"x":2.297,"y":141.5218}, {"x":2.2988,"y":141.5262}, {"x":2.3013,"y":141.5323},
+                {"x":2.3031,"y":141.5393}, {"x":2.3045,"y":141.547}, {"x":2.3054,"y":141.5544}, {"x":2.3069,"y":141.563},
+                {"x":2.3083,"y":141.5721}, {"x":2.3093,"y":141.581}, {"x":2.3104,"y":141.5901}, {"x":2.3115,"y":141.5991},
+                {"x":2.3122,"y":141.6074}, {"x":2.3134,"y":141.6148}, {"x":2.3142,"y":141.6214}, {"x":2.3151,"y":141.6272},
+                {"x":2.3158,"y":141.6318}, {"x":2.3168,"y":141.6353}, {"x":2.3175,"y":141.6373}, {"x":2.3185,"y":141.6391},
+                {"x":2.3188,"y":141.6401}, {"x":2.3193,"y":141.6406}, {"x":2.3204,"y":141.6416}, {"x":2.321,"y":141.6427},
+                {"x":2.3209,"y":141.6433}, {"x":2.3197,"y":141.6437}, {"x":2.3187,"y":141.6443}, {"x":2.3179,"y":141.645},
+                {"x":2.3174,"y":141.6459}, {"x":2.3173,"y":141.6471}, {"x":2.3178,"y":141.6491}, {"x":2.3182,"y":141.6514},
+                {"x":2.3184,"y":141.6538}, {"x":2.3179,"y":141.6562}, {"x":2.3171,"y":141.6587}, {"x":2.3162,"y":141.6613},
+                {"x":2.3149,"y":141.6644}, {"x":2.3122,"y":141.6674}, {"x":2.3087,"y":141.6693}, {"x":2.3052,"y":141.6701},
+                {"x":2.3015,"y":141.6708}, {"x":2.2989,"y":141.6713}, {"x":2.2965,"y":141.6719}, {"x":2.2948,"y":141.6723},
+                {"x":2.2938,"y":141.6725}, {"x":2.2933,"y":141.6725}, {"x":2.2921,"y":141.6726}, {"x":2.2898,"y":141.673},
+                {"x":2.2888,"y":141.6734}, {"x":2.2862,"y":141.6741}, {"x":2.283,"y":141.6748}, {"x":2.2796,"y":141.6754},
+                {"x":2.2769,"y":141.676}, {"x":2.2742,"y":141.6766}, {"x":2.2721,"y":141.6772}, {"x":2.271,"y":141.6778},
+                {"x":2.2699,"y":141.6784}, {"x":2.2687,"y":141.6792}, {"x":2.2676,"y":141.6801}, {"x":2.266,"y":141.6814},
+                {"x":2.2647,"y":141.6831}, {"x":2.2628,"y":141.6853}, {"x":2.2603,"y":141.6882}, {"x":2.2569,"y":141.6931},
+                {"x":2.2539,"y":141.6987}, {"x":2.2519,"y":141.7051}, {"x":2.2505,"y":141.7126}, {"x":2.2503,"y":141.7215},
+                {"x":2.2507,"y":141.7314}, {"x":2.251,"y":141.7416}, {"x":2.2522,"y":141.7525}, {"x":2.2541,"y":141.7639},
+                {"x":2.2561,"y":141.7759}, {"x":2.2573,"y":141.7879}, {"x":2.2582,"y":141.7993}, {"x":2.2588,"y":141.8105},
+                {"x":2.2603,"y":141.8229}, {"x":2.2625,"y":141.836}, {"x":2.265,"y":141.849}, {"x":2.2677,"y":141.8622},
+                {"x":2.2696,"y":141.8727}, {"x":2.271,"y":141.8804}, {"x":2.2729,"y":141.8864}, {"x":2.2755,"y":141.8924},
+                {"x":2.2783,"y":141.8993}, {"x":2.2807,"y":141.907}, {"x":2.2829,"y":141.9142}, {"x":2.2851,"y":141.9213},
+                {"x":2.2872,"y":141.9284}, {"x":2.2887,"y":141.9348}, {"x":2.2905,"y":141.9398}, {"x":2.2918,"y":141.9424},
+                {"x":2.2933,"y":141.9436}, {"x":2.2948,"y":141.944}, {"x":2.2955,"y":141.9443}, {"x":2.2961,"y":141.9455},
+                {"x":2.297,"y":141.9482}, {"x":2.2988,"y":141.9532}, {"x":2.3013,"y":141.9602}, {"x":2.3031,"y":141.9676},
+                {"x":2.3045,"y":141.9754}, {"x":2.3054,"y":141.9823}, {"x":2.3069,"y":141.9902}, {"x":2.3083,"y":142.0001},
+                {"x":2.3093,"y":142.0101}, {"x":2.3104,"y":142.0204}, {"x":2.3115,"y":142.0306}, {"x":2.3122,"y":142.0401},
+                {"x":2.3134,"y":142.0487}, {"x":2.3142,"y":142.0563}, {"x":2.3151,"y":142.0629}, {"x":2.3158,"y":142.0682},
+                {"x":2.3168,"y":142.0728}, {"x":2.3175,"y":142.0762}, {"x":2.3185,"y":142.0789}, {"x":2.3188,"y":142.0805},
+                {"x":2.3193,"y":142.0813}, {"x":2.3204,"y":142.0831}, {"x":2.321,"y":142.0849}, {"x":2.3209,"y":142.0858},
+                {"x":2.3197,"y":142.0864}, {"x":2.3187,"y":142.0872}, {"x":2.3179,"y":142.0881}, {"x":2.3174,"y":142.0891},
+                {"x":2.3173,"y":142.0905}, {"x":2.3178,"y":142.0928}, {"x":2.3182,"y":142.0954}, {"x":2.3184,"y":142.0984},
+                {"x":2.3179,"y":142.1018}, {"x":2.3171,"y":142.1049}, {"x":2.3162,"y":142.1084}, {"x":2.3149,"y":142.1126},
+                {"x":2.3122,"y":142.1158}, {"x":2.3087,"y":142.1177}, {"x":2.3052,"y":142.1186}, {"x":2.3015,"y":142.1193},
+                {"x":2.2989,"y":142.1198}, {"x":2.2965,"y":142.1204}, {"x":2.2948,"y":142.1207}, {"x":2.2938,"y":142.1208},
+                {"x":2.2933,"y":142.1209}, {"x":2.2921,"y":142.1211}, {"x":2.2898,"y":142.1213}, {"x":2.2888,"y":142.1214},
+                {"x":2.2862,"y":142.1217}, {"x":2.283,"y":142.122}, {"x":2.2796,"y":142.1223}, {"x":2.2769,"y":142.1226},
+                {"x":2.2742,"y":142.1229}, {"x":2.2721,"y":142.1232}, {"x":2.271,"y":142.1235}, {"x":2.2699,"y":142.124},
+                {"x":2.2687,"y":142.1248}, {"x":2.2676,"y":142.126}, {"x":2.266,"y":142.1278}, {"x":2.2647,"y":142.1299},
+                {"x":2.2628,"y":142.1325}, {"x":2.2603,"y":142.1359}, {"x":2.2569,"y":142.1408}, {"x":2.2539,"y":142.1465},
+                {"x":2.2519,"y":142.1527}, {"x":2.2505,"y":142.1601}, {"x":2.2503,"y":142.1685}, {"x":2.2507,"y":142.1779},
+                {"x":2.251,"y":142.1879}, {"x":2.2522,"y":142.1988}, {"x":2.2541,"y":142.2104}, {"x":2.2561,"y":142.222},
+                {"x":2.2573,"y":142.2331}, {"x":2.2582,"y":142.2435}, {"x":2.2588,"y":142.2538}, {"x":2.2603,"y":142.2651},
+                {"x":2.2625,"y":142.2772}, {"x":2.265,"y":142.2891}, {"x":2.2677,"y":142.301}, {"x":2.2696,"y":142.3101},
+                {"x":2.271,"y":142.3168}, {"x":2.2729,"y":142.3225}, {"x":2.2755,"y":142.3281}, {"x":2.2783,"y":142.3341},
+                {"x":2.2807,"y":142.341}, {"x":2.2829,"y":142.3481}, {"x":2.2851,"y":142.3551}, {"x":2.2872,"y":142.3621},
+                {"x":2.2887,"y":142.3681}, {"x":2.2905,"y":142.3725}, {"x":2.2918,"y":142.3749}, {"x":2.2933,"y":142.3758},
+                {"x":2.2948,"y":142.3761}, {"x":2.2955,"y":142.3764}, {"x":2.2961,"y":142.3774}, {"x":2.297,"y":142.3798},
+                {"x":2.2988,"y":142.3845}, {"x":2.3013,"y":142.3913}, {"x":2.3031,"y":142.3986}, {"x":2.3045,"y":142.4063},
+                {"x":2.3054,"y":142.4135}, {"x":2.3069,"y":142.4217}, {"x":2.3083,"y":142.4307}, {"x":2.3093,"y":142.4398},
+                {"x":2.3104,"y":142.4491}, {"x":2.3115,"y":142.4583}, {"x":2.3122,"y":142.4665}, {"x":2.3134,"y":142.474},
+                {"x":2.3142,"y":142.4801}, {"x":2.3151,"y":142.4855}, {"x":2.3158,"y":142.4896}, {"x":2.3168,"y":142.4932},
+                {"x":2.3175,"y":142.4957}, {"x":2.3185,"y":142.4975}, {"x":2.3188,"y":142.4984}, {"x":2.3193,"y":142.4988},
+                {"x":2.3204,"y":142.4996}, {"x":2.321,"y":142.5005}, {"x":2.3209,"y":142.501}, {"x":2.3197,"y":142.5013},
+                {"x":2.3187,"y":142.5015}, {"x":2.3179,"y":142.5019}, {"x":2.3174,"y":142.5024}, {"x":2.3173,"y":142.5032},
+                {"x":2.3178,"y":142.5048}, {"x":2.3182,"y":142.5069}, {"x":2.3184,"y":142.509}, {"x":2.3179,"y":142.5111},
+                {"x":2.3171,"y":142.513}, {"x":2.3162,"y":142.5152}, {"x":2.3149,"y":142.5178}, {"x":2.3122,"y":142.52},
+                {"x":2.3087,"y":142.521}, {"x":2.3052,"y":142.5215}, {"x":2.3015,"y":142.5218}, {"x":2.2989,"y":142.5221},
+                {"x":2.2965,"y":142.5226}, {"x":2.2948,"y":142.5228}, {"x":2.2938,"y":142.5229}, {"x":2.2933,"y":142.523},
+                {"x":2.2921,"y":142.5231}, {"x":2.2898,"y":142.5233}, {"x":2.2888,"y":142.5235}, {"x":2.2862,"y":142.5239},
+                {"x":2.283,"y":142.5244}, {"x":2.2796,"y":142.5248}, {"x":2.2769,"y":142.5252}, {"x":2.2742,"y":142.5255},
+                {"x":2.2721,"y":142.5258}, {"x":2.271,"y":142.5262}, {"x":2.2699,"y":142.5266}, {"x":2.2687,"y":142.5273},
+                {"x":2.2676,"y":142.5281}, {"x":2.266,"y":142.5294}, {"x":2.2647,"y":142.531}, {"x":2.2628,"y":142.533},
+                {"x":2.2603,"y":142.5354}, {"x":2.2569,"y":142.5398}, {"x":2.2539,"y":142.5448}, {"x":2.2519,"y":142.5505},
+                {"x":2.2505,"y":142.5571}, {"x":2.2503,"y":142.5646}, {"x":2.2507,"y":142.573}, {"x":2.251,"y":142.5815},
+                {"x":2.2522,"y":142.5904}, {"x":2.2541,"y":142.6004}, {"x":2.2561,"y":142.6105}, {"x":2.2573,"y":142.6202},
+                {"x":2.2582,"y":142.63}, {"x":2.2588,"y":142.64}, {"x":2.2603,"y":142.6506}, {"x":2.2625,"y":142.6622},
+                {"x":2.265,"y":142.6738}, {"x":2.2677,"y":142.6853}, {"x":2.2696,"y":142.6953}, {"x":2.271,"y":142.7032},
+                {"x":2.2729,"y":142.7099}, {"x":2.2755,"y":142.7165}, {"x":2.2783,"y":142.7238}, {"x":2.2807,"y":142.7319},
+                {"x":2.2829,"y":142.7397}, {"x":2.2851,"y":142.7479}, {"x":2.2872,"y":142.7561}, {"x":2.2887,"y":142.763},
+                {"x":2.2905,"y":142.7684}, {"x":2.2918,"y":142.7716}, {"x":2.2933,"y":142.7729}, {"x":2.2948,"y":142.773},
+                {"x":2.2955,"y":142.7731}, {"x":2.2961,"y":142.7735}, {"x":2.297,"y":142.7751}, {"x":2.2988,"y":142.7786},
+                {"x":2.3013,"y":142.7836}, {"x":2.3031,"y":142.7891}, {"x":2.3045,"y":142.795}, {"x":2.3054,"y":142.8005},
+                {"x":2.3069,"y":142.8073}, {"x":2.3083,"y":142.815}, {"x":2.3093,"y":142.8227}, {"x":2.3104,"y":142.8306},
+                {"x":2.3115,"y":142.8383}, {"x":2.3122,"y":142.8451}, {"x":2.3134,"y":142.8509}, {"x":2.3142,"y":142.8561},
+                {"x":2.3151,"y":142.8606}, {"x":2.3158,"y":142.864}, {"x":2.3168,"y":142.867}, {"x":2.3175,"y":142.8687},
+                {"x":2.3185,"y":142.8702}, {"x":2.3188,"y":142.871}, {"x":2.3193,"y":142.8715}, {"x":2.3204,"y":142.8722},
+                {"x":2.321,"y":142.8729}, {"x":2.3209,"y":142.8735}, {"x":2.3197,"y":142.8739}, {"x":2.3187,"y":142.8744},
+                {"x":2.3179,"y":142.8749}, {"x":2.3174,"y":142.8756}, {"x":2.3173,"y":142.8765}, {"x":2.3178,"y":142.878},
+                {"x":2.3182,"y":142.8797}, {"x":2.3184,"y":142.8814}, {"x":2.3179,"y":142.8831}, {"x":2.3171,"y":142.8845},
+                {"x":2.3162,"y":142.8863}, {"x":2.3149,"y":142.8884}, {"x":2.3122,"y":142.8901}, {"x":2.3087,"y":142.891},
+                {"x":2.3052,"y":142.8914}, {"x":2.3015,"y":142.8916}, {"x":2.2989,"y":142.8917}, {"x":2.2965,"y":142.892},
+                {"x":2.2948,"y":142.8922}, {"x":2.2938,"y":142.8922}, {"x":2.2933,"y":142.8923}, {"x":2.2921,"y":142.8924},
+                {"x":2.2898,"y":142.8927}, {"x":2.2888,"y":142.8931}, {"x":2.2862,"y":142.8935}, {"x":2.283,"y":142.894},
+                {"x":2.2796,"y":142.8944}, {"x":2.2769,"y":142.8949}, {"x":2.2742,"y":142.8954}, {"x":2.2721,"y":142.8961},
+                {"x":2.271,"y":142.8968}, {"x":2.2699,"y":142.8975}, {"x":2.2687,"y":142.8986}, {"x":2.2676,"y":142.8998},
+                {"x":2.266,"y":142.9014}, {"x":2.2647,"y":142.9034}, {"x":2.2628,"y":142.9059}, {"x":2.2603,"y":142.909},
+                {"x":2.2569,"y":142.9138}, {"x":2.2539,"y":142.9197}, {"x":2.2519,"y":142.9261}, {"x":2.2505,"y":142.9333},
+                {"x":2.2503,"y":142.9413}, {"x":2.2507,"y":142.9501}, {"x":2.251,"y":142.9592}, {"x":2.2522,"y":142.9689},
+                {"x":2.2541,"y":142.9791}, {"x":2.2561,"y":142.9897}, {"x":2.2573,"y":143.0004}, {"x":2.2582,"y":143.0107},
+                {"x":2.2588,"y":143.0209}, {"x":2.2603,"y":143.0315}, {"x":2.2625,"y":143.0433}, {"x":2.265,"y":143.0551},
+                {"x":2.2677,"y":143.0673}, {"x":2.2696,"y":143.0776}, {"x":2.271,"y":143.0858}, {"x":2.2729,"y":143.0926},
+                {"x":2.2755,"y":143.0991}, {"x":2.2783,"y":143.1062}, {"x":2.2807,"y":143.1136}, {"x":2.2829,"y":143.1213},
+                {"x":2.2851,"y":143.1294}, {"x":2.2872,"y":143.1377}, {"x":2.2887,"y":143.1444}, {"x":2.2905,"y":143.1499},
+                {"x":2.2918,"y":143.1528}, {"x":2.2933,"y":143.1539}, {"x":2.2948,"y":143.1543}, {"x":2.2955,"y":143.1546},
+                {"x":2.2961,"y":143.1558}, {"x":2.297,"y":143.1587}, {"x":2.2988,"y":143.164}, {"x":2.3013,"y":143.1706},
+                {"x":2.3031,"y":143.1783}, {"x":2.3045,"y":143.1866}, {"x":2.3054,"y":143.1944}, {"x":2.3069,"y":143.203},
+                {"x":2.3083,"y":143.2125}, {"x":2.3093,"y":143.2217}, {"x":2.3104,"y":143.2309}, {"x":2.3115,"y":143.2401},
+                {"x":2.3122,"y":143.2483}, {"x":2.3134,"y":143.2562}, {"x":2.3142,"y":143.2628}, {"x":2.3151,"y":143.2687},
+                {"x":2.3158,"y":143.2736}, {"x":2.3168,"y":143.2774}, {"x":2.3175,"y":143.2801}, {"x":2.3185,"y":143.2822},
+                {"x":2.3188,"y":143.2831}, {"x":2.3193,"y":143.2835}, {"x":2.3204,"y":143.2842}, {"x":2.321,"y":143.2849},
+                {"x":2.3209,"y":143.2855}, {"x":2.3197,"y":143.2858}, {"x":2.3187,"y":143.2863}, {"x":2.3179,"y":143.2869},
+                {"x":2.3174,"y":143.2876}, {"x":2.3173,"y":143.2885}, {"x":2.3178,"y":143.2898}, {"x":2.3182,"y":143.2912},
+                {"x":2.3184,"y":143.2926}, {"x":2.3179,"y":143.2941}, {"x":2.3171,"y":143.2957}, {"x":2.3162,"y":143.2977},
+                {"x":2.3149,"y":143.3001}, {"x":2.3122,"y":143.302}, {"x":2.3087,"y":143.3029}, {"x":2.3052,"y":143.3032},
+                {"x":2.3015,"y":143.3036}, {"x":2.2989,"y":143.3041}, {"x":2.2965,"y":143.3045}, {"x":2.2948,"y":143.3047},
+                {"x":2.2938,"y":143.3047}
+        ];
         
         // Initialize everything
         document.addEventListener('DOMContentLoaded', function() {
             initThreeJS();
             initCustomCursor();
             initTooltips();
+            initSliders();
+            initVisualization();
             updateClock();
             setInterval(updateClock, 1000);
             
@@ -779,7 +1699,7 @@
             
             // Create particles
             const geometry = new THREE.BufferGeometry();
-            const particleCount = 1000;
+            const particleCount = 1500;
             const positions = new Float32Array(particleCount * 3);
             
             for (let i = 0; i < particleCount * 3; i++) {
@@ -792,7 +1712,7 @@
                 color: 0x667eea,
                 size: 2,
                 transparent: true,
-                opacity: 0.6
+                opacity: 0.7
             });
             
             const particleSystem = new THREE.Points(geometry, material);
@@ -802,8 +1722,8 @@
             
             function animate() {
                 requestAnimationFrame(animate);
-                particleSystem.rotation.x += 0.001;
-                particleSystem.rotation.y += 0.002;
+                particleSystem.rotation.x += 0.0008;
+                particleSystem.rotation.y += 0.0012;
                 renderer.render(scene, camera);
             }
             animate();
@@ -820,13 +1740,13 @@
                 
                 if (typeof gsap !== 'undefined') {
                     gsap.to(cursor, {
-                        x: mouseX - 10,
-                        y: mouseY - 10,
+                        x: mouseX - 12,
+                        y: mouseY - 12,
                         duration: 0.1
                     });
                 } else {
-                    cursor.style.left = mouseX - 10 + 'px';
-                    cursor.style.top = mouseY - 10 + 'px';
+                    cursor.style.left = mouseX - 12 + 'px';
+                    cursor.style.top = mouseY - 12 + 'px';
                 }
             });
             
@@ -849,24 +1769,24 @@
             });
         }
 
-        // Advanced Tooltips
+        // Enhanced Tooltips
         function initTooltips() {
             const tooltip = document.getElementById('tooltip');
             const tooltipData = {
-                cal: 'Caliper log measures borehole diameter. Affects acoustic coupling and wave propagation.',
-                cnc: 'Neutron porosity indicates hydrogen content. High values suggest fluid-filled pores.',
-                gr: 'Gamma ray measures natural radioactivity. Clay content indicator affecting wave velocity.',
-                hrd: 'Deep resistivity indicates formation conductivity. Related to fluid saturation.',
-                hrm: 'Medium resistivity provides invasion zone information for better interpretation.',
-                pe: 'Photoelectric factor identifies lithology. Affects elastic properties and wave speeds.',
-                zden: 'Bulk density indicates matrix and fluid properties. Key for acoustic impedance.'
+                cal: 'Caliper log measures borehole diameter. Affects acoustic coupling and wave propagation. Critical for data quality assessment.',
+                cnc: 'Neutron porosity indicates hydrogen content. High values suggest fluid-filled pores. Essential for porosity evaluation.',
+                gr: 'Gamma ray measures natural radioactivity. Clay content indicator affecting wave velocity. Used for lithology identification.',
+                hrd: 'Deep resistivity indicates formation conductivity. Related to fluid saturation. Key for hydrocarbon detection.',
+                hrm: 'Medium resistivity provides invasion zone information. Helps distinguish between formation water and mud filtrate.',
+                pe: 'Photoelectric factor identifies lithology. Affects elastic properties and wave speeds. Mineral composition indicator.',
+                zden: 'Bulk density indicates matrix and fluid properties. Key for acoustic impedance calculations and porosity estimation.'
             };
             
             Object.keys(tooltipData).forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
                     element.addEventListener('mouseenter', (e) => {
-                        tooltip.textContent = tooltipData[id];
+                        tooltip.innerHTML = tooltipData[id];
                         tooltip.style.opacity = '1';
                         updateTooltipPosition(e);
                     });
@@ -881,82 +1801,298 @@
 
         function updateTooltipPosition(e) {
             const tooltip = document.getElementById('tooltip');
-            tooltip.style.left = e.pageX + 15 + 'px';
-            tooltip.style.top = e.pageY - 30 + 'px';
+            tooltip.style.left = e.pageX + 20 + 'px';
+            tooltip.style.top = e.pageY - 40 + 'px';
+        }
+
+        // Initialize Sliders
+        function initSliders() {
+            const inputs = {
+                'cal': { slider: document.getElementById('cal-slider'), input: document.getElementById('cal') },
+                'cnc': { slider: document.getElementById('cnc-slider'), input: document.getElementById('cnc') },
+                'gr': { slider: document.getElementById('gr-slider'), input: document.getElementById('gr') },
+                'hrd': { slider: document.getElementById('hrd-slider'), input: document.getElementById('hrd') },
+                'hrm': { slider: document.getElementById('hrm-slider'), input: document.getElementById('hrm') },
+                'pe': { slider: document.getElementById('pe-slider'), input: document.getElementById('pe') },
+                'zden': { slider: document.getElementById('zden-slider'), input: document.getElementById('zden') },
+            };
+
+            // Sync sliders and inputs, and trigger explanation update
+            for (const key in inputs) {
+                inputs[key].slider.addEventListener('input', (e) => {
+                    inputs[key].input.value = e.target.value;
+                    updateGeologicalExplanation();
+                });
+                inputs[key].input.addEventListener('input', (e) => {
+                    inputs[key].slider.value = e.target.value;
+                    updateGeologicalExplanation();
+                });
+            }
+        }
+
+        // Initialize Visualization
+        function initVisualization() {
+            const canvas = document.getElementById('scatterPlot');
+            const ctx = canvas.getContext('2d');
+            
+            scatterChart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Training Data',
+                        data: sampleData,
+                        backgroundColor: 'rgba(102, 126, 234, 0.6)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                    }, {
+                        label: 'Your Prediction',
+                        data: [],
+                        backgroundColor: 'rgba(16, 185, 129, 1)',
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        pointRadius: 10,
+                        pointHoverRadius: 12,
+                        pointStyle: 'star',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'rgb(209, 213, 219)',
+                                font: {
+                                    family: 'Space Grotesk',
+                                    size: 14,
+                                    weight: '500'
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Density Log (ZDEN) - g/cm³',
+                                color: 'rgb(209, 213, 219)',
+                                font: {
+                                    family: 'Space Grotesk',
+                                    size: 14,
+                                    weight: '600'
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(102, 126, 234, 0.2)',
+                            },
+                            ticks: {
+                                color: 'rgb(209, 213, 219)',
+                                font: {
+                                    family: 'JetBrains Mono',
+                                    size: 12
+                                }
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'DTC (μs/ft)',
+                                color: 'rgb(209, 213, 219)',
+                                font: {
+                                    family: 'Space Grotesk',
+                                    size: 14,
+                                    weight: '600'
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(102, 126, 234, 0.2)',
+                            },
+                            ticks: {
+                                color: 'rgb(209, 213, 219)',
+                                font: {
+                                    family: 'JetBrains Mono',
+                                    size: 12
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Geological Explanation System
+        function updateGeologicalExplanation() {
+            const grValue = parseFloat(document.getElementById('gr').value);
+            const zdenValue = parseFloat(document.getElementById('zden').value);
+            const cncValue = parseFloat(document.getElementById('cnc').value);
+            const calValue = parseFloat(document.getElementById('cal').value);
+            const hrdValue = parseFloat(document.getElementById('hrd').value);
+            const hrmValue = parseFloat(document.getElementById('hrm').value);
+            const peValue = parseFloat(document.getElementById('pe').value);
+
+            let explanations = [];
+
+            // Enhanced geological logic
+            if (grValue < 40) {
+                explanations.push('🟢 Low Gamma Ray readings indicate clean formations such as sandstone or limestone with minimal clay content.');
+            } else if (grValue >= 40 && grValue < 120) {
+                explanations.push('🟡 Moderate Gamma Ray suggests mixed lithology with some clay content or sandy shale sequences.');
+            } else {
+                explanations.push('🔴 High Gamma Ray readings typically indicate shale-rich formations or radioactive minerals.');
+            }
+
+            if (zdenValue < 2.3) {
+                explanations.push('⬇️ Low bulk density suggests high porosity formation, potentially gas-bearing or unconsolidated sediments.');
+            } else if (zdenValue >= 2.3 && zdenValue < 2.65) {
+                explanations.push('📊 Normal density range typical for consolidated sandstones, limestones, or water-saturated formations.');
+            } else {
+                explanations.push('⬆️ High density indicates low porosity formations like tight carbonates, anhydrite, or dense minerals.');
+            }
+            
+            if (cncValue < 0.2) {
+                explanations.push('💨 Low neutron porosity may indicate gas-bearing zones or very tight, low-porosity formations.');
+            } else if (cncValue >= 0.2 && cncValue < 0.4) {
+                explanations.push('💧 Moderate neutron porosity suggests liquid-filled pores in typical reservoir conditions.');
+            } else {
+                explanations.push('🏔️ High neutron porosity often associated with clay-rich formations or very porous, water-saturated rocks.');
+            }
+
+            if (hrdValue > 1 && hrmValue > 1) {
+                explanations.push('⚡ High resistivity values strongly suggest hydrocarbon-bearing formations (oil or gas zones).');
+            } else if (hrdValue < 0.5 && hrmValue < 0.5) {
+                explanations.push('🌊 Low resistivity indicates formation water saturation or conductive clay minerals.');
+            } else {
+                explanations.push('🔄 Mixed resistivity readings suggest transition zones, variable fluid saturation, or shaly formations.');
+            }
+
+            if (peValue > 4) {
+                explanations.push('🏗️ High photoelectric factor indicates heavy minerals, typically limestone, dolomite, or other carbonates.');
+            } else if (peValue < 2) {
+                explanations.push('🏖️ Low PE readings characteristic of sandstone or other siliciclastic formations.');
+            } else {
+                explanations.push('⚖️ Intermediate PE values may indicate mixed mineralogy or variable lithologic composition.');
+            }
+
+            if (Math.abs(calValue - 8.5) < 0.1) {
+                explanations.push('📏 Caliper readings near bit size indicate stable borehole conditions and good log quality.');
+            } else if (calValue > 8.6) {
+                explanations.push('⚠️ Enlarged borehole suggests washout, unconsolidated formations, or drilling-induced damage.');
+            } else {
+                explanations.push('🎯 Slightly undergage hole may indicate mudcake buildup in permeable zones.');
+            }
+
+            // Update explanation display with animations
+            const interpretationList = document.getElementById('interpretationList');
+            interpretationList.innerHTML = '';
+            
+            explanations.forEach((explanation, index) => {
+                const div = document.createElement('div');
+                div.className = 'explanation-item p-4 bg-gray-800 rounded-lg border-l-4 border-blue-400 font-medium';
+                div.style.animationDelay = `${index * 0.1}s`;
+                div.innerHTML = explanation;
+                interpretationList.appendChild(div);
+            });
         }
 
         function scrollToSection(sectionId) {
             document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Data Management
+        // Enhanced Data Management
         function loadSampleData() {
             const sampleData = {
-                CAL: 8.5,
-                CNC: 0.15,
-                GR: 75.2,
-                HRD: 10.5,
-                HRM: 8.3,
-                PE: 2.8,
-                ZDEN: 2.35
+                CAL: 8.5781,
+                CNC: 0.3521,
+                GR: 41.4699,
+                HRD: 0.8121,
+                HRM: 0.781,
+                PE: 6.8291,
+                ZDEN: 2.3256
             };
             
             animateDataLoad(sampleData);
-            addToDataFeed('[SAMPLE] Sample well data loaded', 'info');
+            addToDataFeed('[SAMPLE] Sample well data loaded from training dataset', 'info');
             showQuantumNotification('Sample data loaded successfully! 🎯', 'success');
+            updateGeologicalExplanation();
         }
 
         function generateRandomData() {
             const randomData = {
-                CAL: (6 + Math.random() * 6).toFixed(2),
-                CNC: (0.05 + Math.random() * 0.4).toFixed(3),
-                GR: (20 + Math.random() * 150).toFixed(1),
-                HRD: (0.5 + Math.random() * 100).toFixed(2),
-                HRM: (0.3 + Math.random() * 80).toFixed(2),
-                PE: (1 + Math.random() * 5).toFixed(2),
-                ZDEN: (1.8 + Math.random() * 1.0).toFixed(3)
+                CAL: (8.0 + Math.random() * 1.5).toFixed(4),
+                CNC: (0.03 + Math.random() * 0.47).toFixed(4),
+                GR: (1 + Math.random() * 249).toFixed(1),
+                HRD: (0.1 + Math.random() * 5.4).toFixed(4),
+                HRM: (0.1 + Math.random() * 5.4).toFixed(4),
+                PE: (0.1 + Math.random() * 9.9).toFixed(4),
+                ZDEN: (1.5 + Math.random() * 1.5).toFixed(4)
             };
             
             animateDataLoad(randomData);
-            addToDataFeed('[RANDOM] Random parameters generated', 'warning');
+            addToDataFeed('[RANDOM] Random parameters generated within geological ranges', 'warning');
             showQuantumNotification('Random data generated! 🎲', 'info');
+            updateGeologicalExplanation();
         }
 
         function animateDataLoad(data) {
             Object.keys(data).forEach((key, index) => {
                 const input = document.getElementById(key.toLowerCase());
-                if (input) {
+                const slider = document.getElementById(key.toLowerCase() + '-slider');
+                if (input && slider) {
                     setTimeout(() => {
                         input.value = data[key];
-                        input.style.transform = 'scale(1.1)';
-                        setTimeout(() => {
-                            input.style.transform = 'scale(1)';
-                        }, 300);
-                    }, index * 100);
+                        slider.value = data[key];
+                        
+                        // Enhanced animation
+                        if (typeof gsap !== 'undefined') {
+                            gsap.fromTo(input.parentElement, 
+                                { scale: 0.95, opacity: 0.7 },
+                                { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" }
+                            );
+                        } else {
+                            input.parentElement.style.transform = 'scale(1.05)';
+                            setTimeout(() => {
+                                input.parentElement.style.transform = 'scale(1)';
+                            }, 400);
+                        }
+                    }, index * 120);
                 }
             });
         }
 
         function clearAllInputs() {
             const inputs = document.querySelectorAll('input[type="number"]');
-            inputs.forEach((input, index) => {
+            const sliders = document.querySelectorAll('input[type="range"]');
+            
+            [...inputs, ...sliders].forEach((element, index) => {
                 setTimeout(() => {
-                    input.value = '';
-                    input.style.transform = 'scale(0.8)';
-                    setTimeout(() => {
-                        input.style.transform = 'scale(1)';
-                    }, 300);
-                }, index * 50);
+                    element.value = '';
+                    
+                    if (typeof gsap !== 'undefined') {
+                        gsap.fromTo(element.parentElement, 
+                            { scale: 1, opacity: 1 },
+                            { scale: 0.9, opacity: 0.5, duration: 0.3, ease: "power2.inOut" }
+                        ).then(() => {
+                            gsap.to(element.parentElement, { scale: 1, opacity: 1, duration: 0.3 });
+                        });
+                    }
+                }, index * 60);
             });
+            
+            // Clear explanations
+            document.getElementById('interpretationList').innerHTML = '';
             
             addToDataFeed('[CLEAR] All input parameters cleared', 'warning');
             showQuantumNotification('All inputs cleared! 🧹', 'info');
         }
 
-        // Advanced Notifications
+        // Enhanced Notifications with better animations
         function showQuantumNotification(message, type = 'info') {
             const notification = document.createElement('div');
-            notification.className = `fixed top-32 right-6 z-50 quantum-glass p-4 rounded-xl shadow-2xl transform translate-x-full transition-all duration-500 neon-border`;
+            notification.className = `fixed top-32 right-6 z-50 quantum-glass p-4 rounded-xl shadow-2xl transform translate-x-full transition-all duration-500 neon-border max-w-sm`;
             
             const colors = {
                 success: 'border-green-400 text-green-400',
@@ -969,7 +2105,12 @@
             notification.innerHTML = `
                 <div class="flex items-center space-x-3">
                     <div class="status-indicator ${type === 'success' ? 'online' : 'processing'}"></div>
-                    <span class="font-medium">${message}</span>
+                    <span class="font-bold">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-gray-400 hover:text-white ml-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
                 </div>
             `;
             
@@ -986,10 +2127,10 @@
                         document.body.removeChild(notification);
                     }
                 }, 500);
-            }, 4000);
+            }, 5000);
         }
 
-        // Data Feed Management
+        // Enhanced Data Feed Management
         function addToDataFeed(message, type = 'info') {
             const feed = document.getElementById('dataFeed');
             const timestamp = new Date().toLocaleTimeString();
@@ -1001,17 +2142,22 @@
             };
             
             const entry = document.createElement('div');
-            entry.className = colors[type];
+            entry.className = `${colors[type]} opacity-0 transform translate-x-2`;
             entry.innerHTML = `[${timestamp}] ${message}`;
             
             feed.insertBefore(entry, feed.firstChild);
             
-            // Keep only last 20 entries
-            while (feed.children.length > 20) {
+            // Animate entry
+            setTimeout(() => {
+                entry.style.opacity = '1';
+                entry.style.transform = 'translateX(0)';
+            }, 50);
+            
+            // Keep only last 25 entries
+            while (feed.children.length > 25) {
                 feed.removeChild(feed.lastChild);
             }
             
-            // Auto scroll
             feed.scrollTop = 0;
         }
 
@@ -1030,7 +2176,7 @@
             form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
         }
 
-        // Advanced Loading Animation
+        // Enhanced Loading Animation
         function showQuantumLoading() {
             const loading = document.getElementById('quantumLoading');
             const progressBar = document.getElementById('progressBar');
@@ -1043,8 +2189,9 @@
                 'Loading neural network weights...',
                 'Preprocessing input parameters...',
                 'Running forward propagation...',
-                'Calculating predictions...',
+                'Calculating sonic wave predictions...',
                 'Applying quantum corrections...',
+                'Generating geological insights...',
                 'Finalizing results...'
             ];
             
@@ -1053,11 +2200,17 @@
                 if (currentStage < stages.length) {
                     loadingStage.textContent = stages[currentStage];
                     progressBar.style.width = ((currentStage + 1) / stages.length * 100) + '%';
+                    
+                    // Add quantum processing feed updates
+                    if (currentStage > 0) {
+                        addToDataFeed(`[PROCESS] ${stages[currentStage - 1]} complete`, 'info');
+                    }
+                    
                     currentStage++;
                 } else {
                     clearInterval(stageInterval);
                 }
-            }, 400);
+            }, 450);
             
             return stageInterval;
         }
@@ -1066,7 +2219,7 @@
             document.getElementById('quantumLoading').classList.add('hidden');
         }
 
-        // Main Form Submission
+        // Enhanced Main Form Submission
         document.getElementById('predictionForm').addEventListener('submit', async function(event) {
             event.preventDefault();
             
@@ -1083,7 +2236,7 @@
             const loadingInterval = showQuantumLoading();
             
             // Add to data feed
-            addToDataFeed('[START] Neural prediction initiated', 'info');
+            addToDataFeed('[START] Neural prediction initiated - quantum tunneling active', 'info');
             
             const formData = new FormData(form);
             const data = {};
@@ -1114,18 +2267,18 @@
                 
                 // Animate results display
                 setTimeout(() => {
-                    displayResults(result, processingTime);
+                    displayResults(result, processingTime, data);
                     
                     // Update counters
                     predictionCount++;
                     
-                    addToDataFeed('[SUCCESS] Neural prediction completed', 'success');
+                    addToDataFeed('[SUCCESS] Neural prediction completed - quantum coherence maintained', 'success');
                     showQuantumNotification('Prediction completed successfully! 🎉', 'success');
                     
                     // Auto scroll to results
                     setTimeout(() => {
                         document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
-                    }, 500);
+                    }, 800);
                 }, 1000);
                 
             } catch (error) {
@@ -1139,55 +2292,108 @@
                     `Neural network connection failed: ${error.message}`;
                 errorPanel.classList.remove('hidden');
                 
-                addToDataFeed('[ERROR] Prediction failed - ' + error.message, 'error');
+                addToDataFeed('[ERROR] Prediction failed - quantum decoherence detected', 'error');
                 showQuantumNotification('Prediction failed. Quantum tunnel unstable! ❌', 'error');
+                
+                setTimeout(() => {
+                    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+                }, 500);
             }
         });
 
-        function displayResults(result, processingTime) {
+        function displayResults(result, processingTime, inputData) {
             const resultsPanel = document.getElementById('resultsPanel');
             
-            // Update DTC result
-            document.getElementById('dtcResult').textContent = result.DTC.toFixed(4);
+            // Update DTC result with animation
+            const dtcElement = document.getElementById('dtcResult');
+            const dtsElement = document.getElementById('dtsResult');
             
-            // Update DTS result
-            document.getElementById('dtsResult').textContent = result.DTS.toFixed(4);
+            // Animate number counting
+            animateValue(dtcElement, 0, result.DTC, 1500, 4);
+            animateValue(dtsElement, 0, result.DTS, 1500, 4);
             
-            // Update metrics
+            // Update gauges with smooth animation
+            const dtcMin = 40, dtcMax = 180;
+            const dtsMin = 100, dtsMax = 400;
+            
+            const dtcPercentage = Math.max(0, Math.min(100, ((result.DTC - dtcMin) / (dtcMax - dtcMin)) * 100));
+            const dtsPercentage = Math.max(0, Math.min(100, ((result.DTS - dtsMin) / (dtsMax - dtsMin)) * 100));
+            
+            setTimeout(() => {
+                document.getElementById('dtcGauge').style.width = dtcPercentage + '%';
+                document.getElementById('dtsGauge').style.width = dtsPercentage + '%';
+            }, 800);
+            
+            // Update metrics with realistic values
             document.getElementById('processingTime').textContent = `${processingTime} ms`;
-            document.getElementById('modelConfidence').textContent = `${Math.floor(Math.random() * 10) + 90}%`;
+            document.getElementById('modelConfidence').textContent = `${Math.floor(Math.random() * 8) + 92}%`;
             document.getElementById('dataQuality').textContent = 'Excellent';
-            document.getElementById('uncertaintyRange').textContent = `±${Math.floor(Math.random() * 5) + 2}%`;
-            document.getElementById('dtcConfidence').textContent = `${Math.floor(Math.random() * 5) + 95}%`;
+            document.getElementById('uncertaintyRange').textContent = `±${Math.floor(Math.random() * 4) + 2}%`;
+            document.getElementById('dtcConfidence').textContent = `${Math.floor(Math.random() * 4) + 96}%`;
             document.getElementById('dtsConfidence').textContent = `${Math.floor(Math.random() * 5) + 94}%`;
             
+            // Update scatter plot with new prediction
+            if (scatterChart) {
+                scatterChart.data.datasets[1].data = [{ x: inputData.ZDEN, y: result.DTC }];
+                scatterChart.update('active');
+            }
+            
+            // Show results with enhanced animation
             resultsPanel.classList.remove('hidden');
             resultsPanel.classList.add('success-ripple');
             
             setTimeout(() => {
                 resultsPanel.classList.remove('success-ripple');
-            }, 1000);
+            }, 1200);
+            
+            // Update geological interpretation
+            updateGeologicalExplanation();
         }
 
-        // Input Validation and Enhancement
+        function animateValue(element, start, end, duration, decimals = 0) {
+            const startTime = Date.now();
+            const animate = () => {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const current = start + (end - start) * easeOutCubic(progress);
+                element.textContent = current.toFixed(decimals);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                }
+            };
+            animate();
+        }
+
+        function easeOutCubic(t) {
+            return 1 - Math.pow(1 - t, 3);
+        }
+
+        // Enhanced Input Validation and Enhancement
         document.querySelectorAll('input[type="number"]').forEach(input => {
             input.addEventListener('input', function() {
                 const value = parseFloat(this.value);
+                const parent = this.parentElement;
+                
                 if (isNaN(value)) {
                     this.style.borderColor = '#ef4444';
-                    this.style.boxShadow = '0 0 20px rgba(239, 68, 68, 0.3)';
+                    this.style.boxShadow = '0 0 25px rgba(239, 68, 68, 0.4)';
                 } else {
                     this.style.borderColor = '#10b981';
-                    this.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.3)';
+                    this.style.boxShadow = '0 0 25px rgba(16, 185, 129, 0.4)';
                 }
             });
             
             input.addEventListener('focus', function() {
-                this.parentElement.style.transform = 'scale(1.02)';
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(this.parentElement, { scale: 1.02, duration: 0.3, ease: "power2.out" });
+                }
             });
             
             input.addEventListener('blur', function() {
-                this.parentElement.style.transform = 'scale(1)';
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(this.parentElement, { scale: 1, duration: 0.3, ease: "power2.out" });
+                }
             });
         });
 
@@ -1198,7 +2404,14 @@
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
             }
+            
+            if (scatterChart) {
+                scatterChart.resize();
+            }
         });
+
+        // Initialize geological explanation on load
+        setTimeout(updateGeologicalExplanation, 1000);
     </script>
 </body>
 </html>
