@@ -2,7 +2,7 @@
 
 **AI-Powered Sonic Log Prediction for Oil & Gas Industry**
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://your-deployed-app-url.render.com)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://sonic-wave-ml-predictor.onrender.com)
 [![Python](https://img.shields.io/badge/Python-3.8+-blue)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Framework-009688)](https://fastapi.tiangolo.com)
 [![XGBoost](https://img.shields.io/badge/XGBoost-ML-orange)](https://xgboost.readthedocs.io)
@@ -201,7 +201,7 @@ This script:
 
 ## 🌐 Live Demo
 
-🔗 **[Try the Live Demo](https://your-deployed-app-url.render.com)**
+🔗 **[Try the Live Demo](sonic-wave-ml-predictor.onrender.com)**
 
 Experience the power of AI-driven sonic prediction:
 - Interactive sliders for all input parameters
@@ -321,7 +321,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🚀 Ready to Transform Your Well Log Analysis?
 
-**[🌐 Try Live Demo](https://sonic-wave-ml-predictor.onrender.com/) | [📧 Contact Us](mailto:hardik2004gupta@gmail.com) | [⭐ Star This Repo](https://github.com/hardik2004gupta/sonic-wave-predictor)**
+**[🌐 Try Live Demo](https://sonic-wave-ml-predictor.onrender.com/) | [📧 Contact Us](mailto:hardik2004gupta@gmail.com) | [⭐ Star This Repo](https://github.com/hardik2004gupta/Sonic_Wave_ML_Predictor)**
 
 ---
 
